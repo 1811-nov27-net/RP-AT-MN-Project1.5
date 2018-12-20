@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Project1_5_Library.RepoInterfaces
 {
-    interface IReservationRepository
+    public interface IReservationRepository
     {
         IEnumerable GetAll();
         Reservation GetById(int id);

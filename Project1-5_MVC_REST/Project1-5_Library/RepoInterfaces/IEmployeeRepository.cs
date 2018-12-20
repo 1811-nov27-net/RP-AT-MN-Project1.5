@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Project1_5_Library.RepoInterfaces
 {
-    interface IEmployeeRepository
+    public interface IEmployeeRepository
     {
         IEnumerable GetAll();
         Employee GetById(int id);

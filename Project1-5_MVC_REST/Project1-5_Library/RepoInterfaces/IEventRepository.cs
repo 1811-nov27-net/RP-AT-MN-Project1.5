@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Project1_5_Library.RepoInterfaces
 {
-    interface IEventRepository
+    public interface IEventRepository
     {
         IEnumerable GetAll();
         Event GetById(int id);

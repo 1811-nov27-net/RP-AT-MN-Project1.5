@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Project1_5_Library.RepoInterfaces
 {
-    interface IRoomRepository
+    public interface IRoomRepository
     {
         IEnumerable GetAll();
         Room GetById(int id);
