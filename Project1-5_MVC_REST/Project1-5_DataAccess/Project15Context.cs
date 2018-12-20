@@ -19,7 +19,7 @@ namespace Project1_5_DataAccess
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Events> Events { get; set; }
         public virtual DbSet<EventsCustomers> EventsCustomers { get; set; }
-        public virtual DbSet<Reservation> Reservation { get; set; }
+        public virtual DbSet<Reservations> Reservation { get; set; }
         public virtual DbSet<Rooms> Rooms { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -67,7 +67,7 @@ namespace Project1_5_DataAccess
                     .HasConstraintName("FK_EventsCustomers_Event");
             });
 
-            modelBuilder.Entity<Reservation>(entity =>
+            modelBuilder.Entity<Reservations>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 

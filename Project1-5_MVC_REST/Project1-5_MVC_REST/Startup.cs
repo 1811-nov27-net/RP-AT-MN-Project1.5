@@ -12,6 +12,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Project1_5_Library.RepoInterfaces;
 using Project1_5_DataAccess.Repositories;
+using AutoMapper;
+using Project1_5_DataAccess;
+using Project1_5_Library;
 
 namespace Project1_5_MVC_REST
 {
@@ -33,6 +36,28 @@ namespace Project1_5_MVC_REST
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
+
+            //Mapper
+
+            Mapper.Initialize(cfg => {
+                cfg.CreateMap<Customers, Customer>();
+                cfg.CreateMap<Customer, Customers>();
+
+                cfg.CreateMap<Employees, Employee>();
+                cfg.CreateMap<Employee, Employees>();
+
+                cfg.CreateMap<Events, Event>();
+                cfg.CreateMap<Event, Events>();
+
+                cfg.CreateMap<Reservations, Reservation>();
+                cfg.CreateMap<Reservation, Reservations>();
+
+                cfg.CreateMap<Rooms, Room>();
+                cfg.CreateMap<Room, Rooms>();
+
+                cfg.CreateMap<EventsCustomers, EventCustomer>();
+                cfg.CreateMap<EventCustomer, EventsCustomers>();
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
