@@ -5,4 +5,8 @@
     <RootNamespace>Project1_5_DataAccess</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>
