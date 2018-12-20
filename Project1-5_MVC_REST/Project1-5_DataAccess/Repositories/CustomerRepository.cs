@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Project1_5_DataAccess.Repositories
 {
-    class CustomerRepository : ICustomerRepository
+    public class CustomerRepository : ICustomerRepository
     {
         public Customer Create(Customer model)
         {

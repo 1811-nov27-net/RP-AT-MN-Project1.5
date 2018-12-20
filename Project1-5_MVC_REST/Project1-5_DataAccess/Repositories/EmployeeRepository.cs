@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Project1_5_DataAccess.Repositories
 {
-    class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository : IEmployeeRepository
     {
         public Employee Create(Employee model)
         {

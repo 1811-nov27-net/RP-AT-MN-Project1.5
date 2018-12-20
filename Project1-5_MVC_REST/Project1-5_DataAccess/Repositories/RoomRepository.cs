@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Project1_5_DataAccess.Repositories
 {
-    class RoomRepository : IRoomRepository
+    public class RoomRepository : IRoomRepository
     {
         public Room Create(Room model)
         {

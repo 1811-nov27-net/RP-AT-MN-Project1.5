@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Project1_5_DataAccess.Repositories
 {
-    class EventRepository : IEventRepository
+    public class EventRepository : IEventRepository
     {
         public Event Create(Event model)
         {

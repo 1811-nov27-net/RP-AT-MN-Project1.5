@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Project1_5_DataAccess.Repositories
 {
-    class ReservationRepository : IReservationRepository
+    public class ReservationRepository : IReservationRepository
     {
         public Project1_5_Library.Reservation Create(Project1_5_Library.Reservation model)
         {
