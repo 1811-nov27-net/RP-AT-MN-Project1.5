@@ -5,8 +5,4 @@
     <RootNamespace>Project1_5_Library</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="RepoInterfaces\" />
-  </ItemGroup>
-
 </Project>
