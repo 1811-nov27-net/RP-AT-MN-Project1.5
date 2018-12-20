@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Project1_5_Library.RepoInterfaces;
+using Project1_5_DataAccess.Repositories;
 
 namespace Project1_5_MVC_REST
 {
@@ -25,6 +27,13 @@ namespace Project1_5_MVC_REST
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Repositories
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IReservationRepository, ReservationRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
