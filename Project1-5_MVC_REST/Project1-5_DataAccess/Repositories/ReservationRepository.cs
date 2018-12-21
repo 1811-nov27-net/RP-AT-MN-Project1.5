@@ -1,9 +1,11 @@
-﻿using Project1_5_Library;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Project1_5_Library;
 using Project1_5_Library.RepoInterfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Project1_5_DataAccess.Repositories
 {
@@ -19,34 +21,66 @@ namespace Project1_5_DataAccess.Repositories
             db.Database.EnsureCreated();
         }
 
-        public Project1_5_Library.Reservation Create(Project1_5_Library.Reservation model)
+        public Reservation Create(Reservation model)
         {
-            throw new NotImplementedException();
+            Reservations reservation = Mapper.Map<Reservation, Reservations>(model);
+
+            _db.Add(reservation);
+
+            model = Mapper.Map<Reservations, Reservation>(reservation);
+            return model;
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            Reservation tracked = GetById(id);
+            if (tracked == null)
+            {
+                throw new ArgumentException("No Reservation with this id", nameof(id));
+            }
+            _db.Remove(tracked);
         }
 
         public IEnumerable GetAll()
         {
-            throw new NotImplementedException();
+            List<Reservations> list = _db.Reservation
+                                        .Include(c => c.Customer)
+                                        .Include(r => r.Room)
+                                        .OrderBy(m => m.Id)
+                                        .ToList();
+
+            return Mapper.Map<List<Reservations>, List<Reservation>>(list);
         }
 
-        public Project1_5_Library.Reservation GetById(int id)
+        public Reservation GetById(int id)
         {
-            throw new NotImplementedException();
+            return Mapper.Map<Reservations, Reservation>(_db.Reservation.Find(id));
+        }
+
+        public Reservation Update(Reservation model, int? id = null)
+        {
+            Reservations reservation = Mapper.Map<Reservation, Reservations>(model);
+
+            if (id == null)
+            {
+                throw new ArgumentException("Nedded id", nameof(id));
+            }
+
+            Reservations tracked = _db.Reservation.Find(id);
+            if (tracked == null)
+            {
+                throw new ArgumentException("No Reservation with this id", nameof(id));
+            }
+
+            _db.Entry(tracked).CurrentValues.SetValues(reservation);
+            model = Mapper.Map<Reservations, Reservation>(reservation);
+
+            return model;
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
-        }
-
-        public Project1_5_Library.Reservation Update(Project1_5_Library.Reservation model, int? id = null)
-        {
-            throw new NotImplementedException();
+            _db.SaveChanges();
         }
     }
 }

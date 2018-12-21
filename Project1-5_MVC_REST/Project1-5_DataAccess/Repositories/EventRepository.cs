@@ -1,9 +1,11 @@
-﻿using Project1_5_Library;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Project1_5_Library;
 using Project1_5_Library.RepoInterfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace Project1_5_DataAccess.Repositories
 {
@@ -21,32 +23,62 @@ namespace Project1_5_DataAccess.Repositories
 
         public Event Create(Event model)
         {
-            throw new NotImplementedException();
+            Events eventDataAccess = Mapper.Map<Event, Events>(model);
+
+            _db.Add(eventDataAccess);
+
+            model = Mapper.Map<Events, Event>(eventDataAccess);
+            return model;
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            Event tracked = GetById(id);
+            if (tracked == null)
+            {
+                throw new ArgumentException("No Event with this id", nameof(id));
+            }
+            _db.Remove(tracked);
         }
 
         public IEnumerable GetAll()
         {
-            throw new NotImplementedException();
+            List<Events> list = _db.Events
+                                        .OrderBy(m => m.Id)
+                                        .ToList();
+
+            return Mapper.Map<List<Events>, List<Event>>(list);
         }
 
         public Event GetById(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public void SaveChanges()
-        {
-            throw new NotImplementedException();
+            return Mapper.Map<Events, Event>(_db.Events.Find(id));
         }
 
         public Event Update(Event model, int? id = null)
         {
-            throw new NotImplementedException();
+            Events eventDataAccess = Mapper.Map<Event, Events>(model);
+
+            if (id == null)
+            {
+                throw new ArgumentException("Nedded id", nameof(id));
+            }
+
+            Events tracked = _db.Events.Find(id);
+            if (tracked == null)
+            {
+                throw new ArgumentException("No Event with this id", nameof(id));
+            }
+
+            _db.Entry(tracked).CurrentValues.SetValues(eventDataAccess);
+            model = Mapper.Map<Events, Event>(eventDataAccess);
+
+            return model;
+        }
+
+        public void SaveChanges()
+        {
+            _db.SaveChanges();
         }
     }
 }
