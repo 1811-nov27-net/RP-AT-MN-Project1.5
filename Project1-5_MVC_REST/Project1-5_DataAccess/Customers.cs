@@ -11,7 +11,7 @@ namespace Project1_5_DataAccess
         public Customers()
         {
             EventsCustomers = new HashSet<EventsCustomers>();
-            Reservation = new HashSet<Reservation>();
+            Reservation = new HashSet<Reservations>();
         }
 
         public int Id { get; set; }
@@ -39,6 +39,6 @@ namespace Project1_5_DataAccess
         [InverseProperty("Customer")]
         public virtual ICollection<EventsCustomers> EventsCustomers { get; set; }
         [InverseProperty("Customer")]
-        public virtual ICollection<Reservation> Reservation { get; set; }
+        public virtual ICollection<Reservations> Reservation { get; set; }
     }
 }

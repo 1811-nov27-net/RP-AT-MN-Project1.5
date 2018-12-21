@@ -33,7 +33,7 @@ namespace Project1_5_DataAccess.Repositories
 
         public void Delete(int id)
         {
-            Reservation tracked = GetById(id);
+            Reservations tracked = _db.Reservation.Find(id);
             if (tracked == null)
             {
                 throw new ArgumentException("No Reservation with this id", nameof(id));
@@ -49,7 +49,7 @@ namespace Project1_5_DataAccess.Repositories
                                         .OrderBy(m => m.Id)
                                         .ToList();
 
-            return Mapper.Map<List<Reservations>, List<Reservation>>(list);
+            return Mapper.Map<List<Reservations>, List<Reservations>>(list);
         }
 
         public Reservation GetById(int id)
