@@ -13,6 +13,7 @@ namespace Project1_5_DataAccess
             EventsCustomers = new HashSet<EventsCustomers>();
         }
 
+        [Key]
         public int Id { get; set; }
         [Required]
         [StringLength(100)]
