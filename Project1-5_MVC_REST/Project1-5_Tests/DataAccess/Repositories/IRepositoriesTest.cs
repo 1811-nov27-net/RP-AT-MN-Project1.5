@@ -6,7 +6,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
 {
     interface IRepositoriesTest
     {
-        void CreateAddressesWorks();
+        void CreateWorks();
         void UpdateWorks();
         void UpdateWithWorngIdShouldReturnException();
         void UpdateWithNoIdShouldReturnException();

@@ -6,7 +6,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
     public class ReservationRepositoryTests : IRepositoriesTest
     {
         [Fact]
-        public void CreateAddressesWorks()
+        public void CreateWorks()
         {
             throw new NotImplementedException();
         }
