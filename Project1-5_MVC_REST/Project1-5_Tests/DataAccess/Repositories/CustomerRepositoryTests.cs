@@ -5,6 +5,8 @@ namespace Project1_5_Tests.DataAccess.Repositories
 {
     public class CustomerRepositoryTests : ARepositoriesTest
     {
+        public CustomerRepositoryTests() : base() { }
+
         [Fact]
         public override void CreateWorks()
         {

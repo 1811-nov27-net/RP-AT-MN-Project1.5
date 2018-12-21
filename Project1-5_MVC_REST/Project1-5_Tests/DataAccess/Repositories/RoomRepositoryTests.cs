@@ -11,10 +11,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
 {
     public class RoomRepositoryTests : ARepositoriesTest
     {
-        public RoomRepositoryTests() : base()
-        {
-
-        }
+        public RoomRepositoryTests() : base() {}
 
         [Fact]
         public override void CreateWorks()
@@ -33,16 +30,15 @@ namespace Project1_5_Tests.DataAccess.Repositories
 
                 //Create customer
                 Room room = new Room { Beds = 1, Cost = 50, RoomType = "Standard" };
-                repo.Create(room);
+                roomSaved = repo.Create(room);
                 repo.SaveChanges();
-                roomSaved = room;
             }
 
             // assert (for assert, once again use the context directly for verify.)
             using (var db = new Project15Context(options))
             {
                 var repo = new RoomRepository(db);
-                Room room = repo.GetById(roomSaved.Id);
+                Room room = Mapper.Map<Rooms, Room>(db.Rooms.First(m => m.RoomType == "Standard"));
 
                 Assert.NotEqual(0, room.Id); // should get some generated ID
                 Assert.Equal(roomSaved.Id, room.Id);
