@@ -8,7 +8,6 @@ namespace Project1_5_DataAccess
     [Table("EventsCustomers", Schema = "Hotel")]
     public partial class EventsCustomers
     {
-        [Key]
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public int EventId { get; set; }

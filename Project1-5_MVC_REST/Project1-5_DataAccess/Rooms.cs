@@ -10,10 +10,9 @@ namespace Project1_5_DataAccess
     {
         public Rooms()
         {
-            Reservation = new HashSet<Reservations>();
+            Reservation = new HashSet<Reservation>();
         }
 
-        [Key]
         public int Id { get; set; }
         [Column(TypeName = "money")]
         public decimal Cost { get; set; }
@@ -24,6 +23,6 @@ namespace Project1_5_DataAccess
         public string RoomType { get; set; }
 
         [InverseProperty("Room")]
-        public virtual ICollection<Reservations> Reservation { get; set; }
+        public virtual ICollection<Reservation> Reservation { get; set; }
     }
 }
