@@ -3,58 +3,58 @@ using Xunit;
 
 namespace Project1_5_Tests.DataAccess.Repositories
 {
-    public class EventRepositoryTests : IRepositoriesTest
+    public class EventRepositoryTests : ARepositoriesTest
     {
         [Fact]
-        public void CreateWorks()
+        public override void CreateWorks()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void DeleteWithIdThatDoesntExistThrowsException()
+        public override void DeleteWithIdThatDoesntExistThrowsException()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void DeleteWorks()
+        public override void DeleteWorks()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void GetAllWorks()
+        public override void GetAllWorks()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void GetByIdThatDoesntExistReturnsNull()
+        public override void GetByIdThatDoesntExistReturnsNull()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void GetByIdWorks()
+        public override void GetByIdWorks()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void UpdateWithNoIdShouldReturnException()
+        public override void UpdateWithNoIdShouldReturnException()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void UpdateWithWorngIdShouldReturnException()
+        public override void UpdateWithWorngIdShouldReturnException()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void UpdateWorks()
+        public override void UpdateWorks()
         {
             throw new NotImplementedException();
         }
