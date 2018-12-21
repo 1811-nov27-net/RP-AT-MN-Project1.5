@@ -19,7 +19,7 @@ namespace Project1_5_DataAccess
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Events> Events { get; set; }
         public virtual DbSet<EventsCustomers> EventsCustomers { get; set; }
-        public virtual DbSet<Reservations> Reservation { get; set; }
+        public virtual DbSet<Reservation> Reservation { get; set; }
         public virtual DbSet<Rooms> Rooms { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,25 +30,8 @@ namespace Project1_5_DataAccess
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
-            modelBuilder.Entity<Customers>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-            });
-
-            modelBuilder.Entity<Employees>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-            });
-
-            modelBuilder.Entity<Events>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-            });
-
             modelBuilder.Entity<EventsCustomers>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.EventsCustomers)
                     .HasForeignKey(d => d.CustomerId)
@@ -62,10 +45,8 @@ namespace Project1_5_DataAccess
                     .HasConstraintName("FK_EventsCustomers_Event");
             });
 
-            modelBuilder.Entity<Reservations>(entity =>
+            modelBuilder.Entity<Reservation>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Reservation)
                     .HasForeignKey(d => d.CustomerId)
@@ -77,11 +58,6 @@ namespace Project1_5_DataAccess
                     .HasForeignKey(d => d.RoomId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Reservation_Room");
-            });
-
-            modelBuilder.Entity<Rooms>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
             });
         }
     }
