@@ -33,7 +33,7 @@ namespace Project1_5_DataAccess.Repositories
 
         public void Delete(int id)
         {
-            Event tracked = GetById(id);
+            Events tracked = Mapper.Map<Event, Events>(GetById(id));
             if (tracked == null)
             {
                 throw new ArgumentException("No Event with this id", nameof(id));

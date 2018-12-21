@@ -33,7 +33,7 @@ namespace Project1_5_DataAccess.Repositories
 
         public void Delete(int id)
         {
-            Room tracked = GetById(id);
+            Rooms tracked = Mapper.Map<Room, Rooms>(GetById(id));
             if (tracked == null)
             {
                 throw new ArgumentException("No Room with this id", nameof(id));
