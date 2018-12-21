@@ -9,6 +9,16 @@ namespace Project1_5_DataAccess.Repositories
 {
     public class RoomRepository : IRoomRepository
     {
+        private readonly Project15Context _db;
+
+        public RoomRepository(Project15Context db)
+        {
+            _db = db ?? throw new ArgumentNullException(nameof(db));
+
+            // code-first style, make sure the database exists by now.
+            db.Database.EnsureCreated();
+        }
+
         public Room Create(Room model)
         {
             throw new NotImplementedException();

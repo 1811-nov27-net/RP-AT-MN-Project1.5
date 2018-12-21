@@ -9,6 +9,16 @@ namespace Project1_5_DataAccess.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
+        private readonly Project15Context _db;
+
+        public CustomerRepository(Project15Context db)
+        {
+            _db = db ?? throw new ArgumentNullException(nameof(db));
+
+            // code-first style, make sure the database exists by now.
+            db.Database.EnsureCreated();
+        }
+
         public Customer Create(Customer model)
         {
             throw new NotImplementedException();

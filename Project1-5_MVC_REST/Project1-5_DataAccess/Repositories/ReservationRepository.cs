@@ -9,6 +9,16 @@ namespace Project1_5_DataAccess.Repositories
 {
     public class ReservationRepository : IReservationRepository
     {
+        private readonly Project15Context _db;
+
+        public ReservationRepository(Project15Context db)
+        {
+            _db = db ?? throw new ArgumentNullException(nameof(db));
+
+            // code-first style, make sure the database exists by now.
+            db.Database.EnsureCreated();
+        }
+
         public Project1_5_Library.Reservation Create(Project1_5_Library.Reservation model)
         {
             throw new NotImplementedException();

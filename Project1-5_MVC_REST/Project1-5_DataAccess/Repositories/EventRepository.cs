@@ -9,6 +9,16 @@ namespace Project1_5_DataAccess.Repositories
 {
     public class EventRepository : IEventRepository
     {
+        private readonly Project15Context _db;
+
+        public EventRepository(Project15Context db)
+        {
+            _db = db ?? throw new ArgumentNullException(nameof(db));
+
+            // code-first style, make sure the database exists by now.
+            db.Database.EnsureCreated();
+        }
+
         public Event Create(Event model)
         {
             throw new NotImplementedException();
