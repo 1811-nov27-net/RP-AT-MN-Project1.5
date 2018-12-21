@@ -8,6 +8,7 @@ namespace Project1_5_DataAccess
     [Table("Employees", Schema = "Hotel")]
     public partial class Employees
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         [StringLength(100)]

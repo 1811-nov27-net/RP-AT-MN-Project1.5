@@ -14,6 +14,7 @@ namespace Project1_5_DataAccess
             Reservation = new HashSet<Reservations>();
         }
 
+        [Key]
         public int Id { get; set; }
         [Required]
         [StringLength(100)]

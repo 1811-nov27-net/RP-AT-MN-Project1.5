@@ -8,6 +8,7 @@ namespace Project1_5_DataAccess
     [Table("Reservation", Schema = "Hotel")]
     public partial class Reservations
     {
+        [Key]
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public int RoomId { get; set; }
