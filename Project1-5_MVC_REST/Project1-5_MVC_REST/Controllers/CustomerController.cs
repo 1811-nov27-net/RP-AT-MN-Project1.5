@@ -36,7 +36,7 @@ namespace Project1_5_MVC_REST.Controllers
         }
 
         // GET: api/Customer/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public ActionResult<Customer> Get(int id)
         {
             Customer customerDB;

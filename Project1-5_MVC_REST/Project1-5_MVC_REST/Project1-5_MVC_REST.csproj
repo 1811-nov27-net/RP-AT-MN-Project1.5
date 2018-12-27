@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers - Copy %282%29\**" />
+    <Compile Remove="Controllers - Copy\**" />
+    <Content Remove="Controllers - Copy %282%29\**" />
+    <Content Remove="Controllers - Copy\**" />
+    <EmbeddedResource Remove="Controllers - Copy %282%29\**" />
+    <EmbeddedResource Remove="Controllers - Copy\**" />
+    <None Remove="Controllers - Copy %282%29\**" />
+    <None Remove="Controllers - Copy\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
