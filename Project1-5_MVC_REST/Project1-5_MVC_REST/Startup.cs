@@ -15,6 +15,7 @@ using Project1_5_DataAccess.Repositories;
 using AutoMapper;
 using Project1_5_DataAccess;
 using Project1_5_Library;
+using Microsoft.EntityFrameworkCore;
 
 namespace Project1_5_MVC_REST
 {
@@ -38,7 +39,6 @@ namespace Project1_5_MVC_REST
             services.AddScoped<IRoomRepository, RoomRepository>();
 
             //Mapper
-
             Mapper.Initialize(cfg => {
                 cfg.CreateMap<Customers, Customer>();
                 cfg.CreateMap<Customer, Customers>();
@@ -58,6 +58,8 @@ namespace Project1_5_MVC_REST
                 cfg.CreateMap<EventsCustomers, EventCustomer>();
                 cfg.CreateMap<EventCustomer, EventsCustomers>();
             });
+
+            services.AddDbContext<Project15Context>(optionsBuilder => optionsBuilder.UseSqlServer(Configuration.GetConnectionString("Project1-5")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

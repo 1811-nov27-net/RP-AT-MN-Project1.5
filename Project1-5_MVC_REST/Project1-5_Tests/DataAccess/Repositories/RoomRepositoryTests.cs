@@ -57,7 +57,45 @@ namespace Project1_5_Tests.DataAccess.Repositories
         [Fact]
         public override void DeleteWorks()
         {
-            throw new NotImplementedException();
+            Room roomSaved = null;
+            int id = 0;
+
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_room_test_delete").Options;
+            using (var db = new Project15Context(options)) ;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                //Create customer
+                Room room = new Room { Beds = 1, Cost = 50, RoomType = "Standard" };
+                roomSaved = repo.Create(room);
+                repo.SaveChanges();
+
+                id = roomSaved.Id;
+            }
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+                Room room = repo.GetById(id);
+
+                Assert.NotEqual(0, room.Id); // should get some generated ID
+                Assert.Equal(roomSaved.Id, room.Id);
+                Assert.Equal(1, room.Beds);
+                Assert.Equal(50, room.Cost);
+                Assert.Equal("Standard", room.RoomType);
+
+                repo.Delete(id);
+                repo.SaveChanges();
+                room = repo.GetById(id);
+
+                Assert.Null(room);
+            }
         }
 
         [Fact]
