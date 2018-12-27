@@ -36,7 +36,7 @@ namespace Project1_5_MVC_REST.Controllers
         }
 
         // GET: api/Customer/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCustomer")]
         public ActionResult<Customer> Get(int id)
         {
             Customer customerDB;
@@ -72,7 +72,7 @@ namespace Project1_5_MVC_REST.Controllers
             }
             // return proper 201 Created response, based on correct route for get-by-ID,
             // and return the representation of the object.
-            return CreatedAtRoute("Get", new { id = customer.Id }, customer);
+            return CreatedAtRoute("GetCustomer", new { id = customer.Id }, customer);
         }
 
         // PUT: api/Customer/5
