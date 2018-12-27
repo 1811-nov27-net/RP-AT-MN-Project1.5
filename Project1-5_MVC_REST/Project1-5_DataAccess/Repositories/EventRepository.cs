@@ -81,5 +81,20 @@ namespace Project1_5_DataAccess.Repositories
         {
             _db.SaveChanges();
         }
+
+        public EventCustomer AddCustomerToEvent(int eventId, int customerId, bool paid)
+        {
+            EventsCustomers model = new EventsCustomers
+            {
+                EventId = eventId,
+                CustomerId = customerId,
+                Paid = paid
+            };
+
+            _db.Add(model);
+
+            EventCustomer item = Mapper.Map<EventsCustomers, EventCustomer>(model);
+            return item;
+        }
     }
 }

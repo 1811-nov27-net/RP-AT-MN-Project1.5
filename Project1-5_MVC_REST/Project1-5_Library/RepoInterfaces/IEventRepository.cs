@@ -16,5 +16,7 @@ namespace Project1_5_Library.RepoInterfaces
         void Delete(int id);
 
         void SaveChanges();
+
+        EventCustomer AddCustomerToEvent(int eventId, int customerId, bool paid);
     }
 }

@@ -14,10 +14,12 @@ namespace Project1_5_MVC_REST.Controllers
     public class EventController : ControllerBase
     {
         private IEventRepository Repository { get; set; }
+        private ICustomerRepository CustomerRepository { get; set; }
 
-        public EventController(IEventRepository _respository)
+        public EventController(IEventRepository _respository, ICustomerRepository _customerRepository)
         {
             Repository = _respository;
+            CustomerRepository = _customerRepository;
         }
 
         // GET: api/Event
@@ -135,6 +137,68 @@ namespace Project1_5_MVC_REST.Controllers
             }
             // return proper 204 No Content response
             return NoContent(); // success = Ok()
+        }
+        
+        // POST: api/Event/1/3
+        [HttpPost]
+        /*
+         * Check if need to create a new route in startup.cs
+         */ 
+        public ActionResult AddCustomerToEvent(int eventId, int customerId, bool paid)
+        {
+            /*Event evtDB;
+            Customer customerDB;
+            EventCustomer eventCustomer;
+
+            //Get Event
+            try
+            {
+                evtDB = Repository.GetById(eventId);
+            }
+            catch (Exception ex)
+            {
+                // internal server error
+                return StatusCode(500, ex);
+            }
+            if (evtDB == null)
+            {
+                return NotFound(); // if resource doesn't exist, i'll return an error
+            }
+
+            //Get Customer
+            try
+            {
+                customerDB = CustomerRepository.GetById(customerId);
+            }
+            catch (Exception ex)
+            {
+                // internal server error
+                return StatusCode(500, ex);
+            }
+            if (customerDB == null)
+            {
+                return NotFound(); // if resource doesn't exist, i'll return an error
+            }
+
+            try
+            {
+                eventCustomer = Repository.AddCustomerToEvent(eventId, customerId, paid);
+                Repository.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                // internal server error
+                return StatusCode(500, ex);
+            }*/
+
+            /*
+             * Check how should be the return
+             *      if 201 for EventCustomer (CREATED)  -> return item
+             *          return CreatedAtRoute("GetCustomerEvent", new { id = eventCustomer.Id }, eventCustomer);
+             *      or 204 for Event (NO CONTENT)       -> return evtDB
+             *          return NoContent(); // success = Ok()
+             */
+            return null;
         }
     }
 }
