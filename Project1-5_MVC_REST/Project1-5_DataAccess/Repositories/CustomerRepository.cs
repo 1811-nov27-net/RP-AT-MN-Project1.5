@@ -33,7 +33,8 @@ namespace Project1_5_DataAccess.Repositories
 
         public void Delete(int id)
         {
-            Customers tracked = Mapper.Map<Customer, Customers>(GetById(id));
+            //Customers tracked = Mapper.Map<Customer, Customers>(GetById(id));
+            Customers tracked = _db.Customers.Find(id);
             if (tracked == null)
             {
                 throw new ArgumentException("No Customer with this id", nameof(id));

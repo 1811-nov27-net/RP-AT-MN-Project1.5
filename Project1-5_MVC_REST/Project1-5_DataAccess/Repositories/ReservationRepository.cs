@@ -33,7 +33,8 @@ namespace Project1_5_DataAccess.Repositories
 
         public void Delete(int id)
         {
-            Reservations tracked = Mapper.Map<Reservation, Reservations>(GetById(id));
+            //Reservations tracked = Mapper.Map<Reservation, Reservations>(GetById(id));
+            Reservations tracked = _db.Reservation.Find(id);
             if (tracked == null)
             {
                 throw new ArgumentException("No Reservation with this id", nameof(id));

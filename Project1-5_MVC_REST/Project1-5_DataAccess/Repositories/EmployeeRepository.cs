@@ -33,7 +33,8 @@ namespace Project1_5_DataAccess.Repositories
 
         public void Delete(int id)
         {
-            Employees tracked = Mapper.Map<Employee, Employees>(GetById(id));
+            //Employees tracked = Mapper.Map<Employee, Employees>(GetById(id));
+            Employees tracked = _db.Employees.Find(id);
             if (tracked == null)
             {
                 throw new ArgumentException("No Employee with this id", nameof(id));
