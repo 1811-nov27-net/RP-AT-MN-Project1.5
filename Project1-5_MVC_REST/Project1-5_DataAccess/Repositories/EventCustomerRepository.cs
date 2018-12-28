@@ -9,11 +9,11 @@ using System.Linq;
 
 namespace Project1_5_DataAccess.Repositories
 {
-    public class EventRepository : IEventRepository
+    public class EventCustomerRepository : IEventCustomerRepository
     {
         private readonly Project15Context _db;
 
-        public EventRepository(Project15Context db)
+        public EventCustomerRepository(Project15Context db)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
 
@@ -21,58 +21,58 @@ namespace Project1_5_DataAccess.Repositories
             db.Database.EnsureCreated();
         }
 
-        public Event Create(Event model)
+        public EventCustomer Create(EventCustomer model)
         {
-            Events eventDataAccess = Mapper.Map<Event, Events>(model);
+            EventsCustomers eventDataAccess = Mapper.Map<EventCustomer, EventsCustomers>(model);
 
             _db.Add(eventDataAccess);
 
-            model = Mapper.Map<Events, Event>(eventDataAccess);
+            model = Mapper.Map<EventsCustomers, EventCustomer>(eventDataAccess);
             return model;
         }
 
         public void Delete(int id)
         {
-            //Events tracked = Mapper.Map<Event, Events>(GetById(id));
-            Events tracked = _db.Events.Find(id);
+            //EventsCustomers tracked = Mapper.Map<Event, EventsCustomers>(GetById(id));
+            EventsCustomers tracked = _db.EventsCustomers.Find(id);
             if (tracked == null)
             {
-                throw new ArgumentException("No Event with this id", nameof(id));
+                throw new ArgumentException("No EventCustomerwith this id", nameof(id));
             }
             _db.Remove(tracked);
         }
 
         public IEnumerable GetAll()
         {
-            List<Events> list = _db.Events
+            List<EventsCustomers> list = _db.EventsCustomers
                                         .OrderBy(m => m.Id)
                                         .ToList();
 
-            return Mapper.Map<List<Events>, List<Event>>(list);
+            return Mapper.Map<List<EventsCustomers>, List<EventCustomer>>(list);
         }
 
-        public Event GetById(int id)
+        public EventCustomer GetById(int id)
         {
-            return Mapper.Map<Events, Event>(_db.Events.Find(id));
+            return Mapper.Map<EventsCustomers, EventCustomer>(_db.EventsCustomers.Find(id));
         }
 
-        public Event Update(Event model, int? id = null)
+        public EventCustomer Update(EventCustomer model, int? id = null)
         {
-            Events eventDataAccess = Mapper.Map<Event, Events>(model);
+            EventsCustomers eventDataAccess = Mapper.Map<EventCustomer, EventsCustomers>(model);
 
             if (id == null)
             {
                 throw new ArgumentException("Nedded id", nameof(id));
             }
 
-            Events tracked = _db.Events.Find(id);
+            EventsCustomers tracked = _db.EventsCustomers.Find(id);
             if (tracked == null)
             {
-                throw new ArgumentException("No Event with this id", nameof(id));
+                throw new ArgumentException("No EventCustomerwith this id", nameof(id));
             }
 
             _db.Entry(tracked).CurrentValues.SetValues(eventDataAccess);
-            model = Mapper.Map<Events, Event>(eventDataAccess);
+            model = Mapper.Map<EventsCustomers, EventCustomer>(eventDataAccess);
 
             return model;
         }

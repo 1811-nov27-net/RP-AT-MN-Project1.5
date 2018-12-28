@@ -5,18 +5,16 @@ using System.Text;
 
 namespace Project1_5_Library.RepoInterfaces
 {
-    public interface IEventRepository
+    public interface IEventCustomerRepository
     {
         IEnumerable GetAll();
-        Event GetById(int id);
+        EventCustomer GetById(int id);
 
-        Event Create(Event model);
-        Event Update(Event model, int? id = null);
+        EventCustomer Create(EventCustomer model);
+        EventCustomer Update(EventCustomer model, int? id = null);
 
         void Delete(int id);
 
         void SaveChanges();
-
-        EventCustomer AddCustomerToEvent(EventCustomer model);
     }
 }
