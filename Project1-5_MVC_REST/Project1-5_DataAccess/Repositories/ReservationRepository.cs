@@ -45,12 +45,12 @@ namespace Project1_5_DataAccess.Repositories
         public IEnumerable GetAll()
         {
             List<Reservations> list = _db.Reservation
-                                        .Include(c => c.Customer)
-                                        .Include(r => r.Room)
+                                        /*.Include(c => c.Customer)
+                                        .Include(r => r.Room)*/
                                         .OrderBy(m => m.Id)
                                         .ToList();
 
-            return Mapper.Map<List<Reservations>, List<Reservations>>(list);
+            return Mapper.Map<List<Reservations>, List<Reservation>>(list);
         }
 
         public Reservation GetById(int id)
