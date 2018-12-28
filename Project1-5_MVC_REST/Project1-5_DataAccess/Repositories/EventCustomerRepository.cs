@@ -45,6 +45,8 @@ namespace Project1_5_DataAccess.Repositories
         public IEnumerable GetAll()
         {
             List<EventsCustomers> list = _db.EventsCustomers
+                                        /*.Include(ec => ec.Customer)
+                                        .Include(ev => ev.Event)*/
                                         .OrderBy(m => m.Id)
                                         .ToList();
 
@@ -53,7 +55,12 @@ namespace Project1_5_DataAccess.Repositories
 
         public EventCustomer GetById(int id)
         {
-            return Mapper.Map<EventsCustomers, EventCustomer>(_db.EventsCustomers.Find(id));
+            return Mapper.Map<EventsCustomers, EventCustomer>(
+                                                                _db.EventsCustomers
+                                                                //.Include(ec => ec.Customer)
+                                                                //.Include(ev => ev.Event)
+                                                                .SingleOrDefault(e => e.Id == id)
+                                                             );
         }
 
         public EventCustomer Update(EventCustomer model, int? id = null)

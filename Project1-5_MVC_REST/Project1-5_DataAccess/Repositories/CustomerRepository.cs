@@ -45,10 +45,10 @@ namespace Project1_5_DataAccess.Repositories
         public IEnumerable GetAll()
         {
             List<Customers> list = _db.Customers
-                                        .Include(ev => ev.EventsCustomers)
+                                        /*.Include(ev => ev.EventsCustomers)
                                         .ThenInclude(e => e.Event)
                                         .Include(cr => cr.Reservation)
-                                        .ThenInclude(r => r.Room)
+                                        .ThenInclude(r => r.Room)*/
                                         .OrderBy(m => m.Id)
                                         .ToList();
 
