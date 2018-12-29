@@ -52,7 +52,24 @@ namespace Project1_5_Tests.DataAccess.Repositories
         [Fact]
         public override void DeleteWithIdThatDoesntExistThrowsException()
         {
-            throw new NotImplementedException();
+            int id = 1000;
+
+            // arrange (use the context directl - we assume that it works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("dp_room_test-delete").Options;
+
+            using (var db = new Project15Context(options));
+
+            using(var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = repo.GetById(id);
+
+                Assert.Null(room);
+
+                Assert.Throws<ArgumentException>(() => repo.Delete(id));
+            }
         }
 
         [Fact]
