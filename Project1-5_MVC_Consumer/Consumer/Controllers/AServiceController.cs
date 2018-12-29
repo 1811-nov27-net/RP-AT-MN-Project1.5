@@ -9,11 +9,11 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TemperatureWebSite.Controllers
+namespace Consumer.Controllers
 	{
 		public class AServiceController : Controller
 		{
-			protected static readonly string s_CookieName = "TempApiAuth";
+			protected static readonly string s_CookieName = "HotelApiAuth";
 			private static readonly Uri s_serviceUri = new Uri("https://localhost:44336");
 
 			public HttpClient Client { get; set; }

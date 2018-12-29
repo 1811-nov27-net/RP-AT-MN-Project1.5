@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Project1_5_Library;
-using TemperatureWebSite.Controllers;
+using Consumer.Controllers;
 
 namespace Consumer.Controllers
 {
