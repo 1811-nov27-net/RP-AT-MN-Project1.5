@@ -63,6 +63,17 @@ namespace Project1_5_DataAccess.Repositories
                                                              );
         }
 
+        public IEnumerable GetByCustomerId(int id)
+        {
+            return Mapper.Map<List<EventsCustomers>, List<EventCustomer>>(
+                                                                _db.EventsCustomers
+                                                                //.Include(ec => ec.Customer)
+                                                                .Include(ev => ev.Event)
+                                                                .Where(e => e.CustomerId == id)
+                                                                .ToList()
+                                                             );
+        }
+
         public EventCustomer Update(EventCustomer model, int? id = null)
         {
             EventsCustomers eventDataAccess = Mapper.Map<EventCustomer, EventsCustomers>(model);
