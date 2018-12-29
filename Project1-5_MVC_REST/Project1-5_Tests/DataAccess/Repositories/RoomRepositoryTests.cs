@@ -4,6 +4,7 @@ using Project1_5_DataAccess;
 using Project1_5_DataAccess.Repositories;
 using Project1_5_Library;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -63,7 +64,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
             // arrange (use the context directly - we assume that works)
             var options = new DbContextOptionsBuilder<Project15Context>()
                 .UseInMemoryDatabase("db_room_test_delete").Options;
-            using (var db = new Project15Context(options)) ;
+            using (var db = new Project15Context(options));
 
             // act (for act, only use the repo, to test it)
             using (var db = new Project15Context(options))
@@ -101,7 +102,49 @@ namespace Project1_5_Tests.DataAccess.Repositories
         [Fact]
         public override void GetAllWorks()
         {
-            throw new NotImplementedException();
+            List<Room> list = new List<Room>();
+            Room roomSaved = null;
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_room_test_getAll").Options;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                for(int i = 0; i < 10; i++)
+                {
+                    Room room = new Room
+                    {
+                        Cost = 150,
+                        Beds = 3,
+                        RoomType = $"Room {i}"
+                    };
+                    roomSaved = repo.Create(room);
+                    repo.SaveChanges();
+                    list.Add(roomSaved);
+                }
+            }
+            
+            // asssert (for assert, once again use the context directly for verification.)
+            using(var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+                List<Room> rooms = (List<Room>)repo.GetAll();
+
+                // should equal the same amount of rooms
+                Assert.Equal(list.Count, rooms.Count);
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    Assert.Equal(list[i].Cost, rooms[i].Cost);
+                    Assert.Equal(list[i].Beds, rooms[i].Beds);
+                    Assert.Equal(list[i].RoomType, rooms[i].RoomType);
+
+                }
+            }
+
         }
 
         [Fact]

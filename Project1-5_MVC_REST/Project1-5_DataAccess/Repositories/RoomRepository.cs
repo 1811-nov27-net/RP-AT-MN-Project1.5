@@ -18,7 +18,7 @@ namespace Project1_5_DataAccess.Repositories
             _db = db ?? throw new ArgumentNullException(nameof(db));
 
             // code-first style, make sure the database exists by now.
-            db.Database.EnsureCreated();
+           // db.Database.EnsureCreated();
         }
 
         public Room Create(Room model)
@@ -62,7 +62,7 @@ namespace Project1_5_DataAccess.Repositories
 
             if (id == null)
             {
-                throw new ArgumentException("Nedded id", nameof(id));
+                throw new ArgumentException("Needed id", nameof(id));
             }
 
             Rooms tracked = _db.Rooms.Find(id);
