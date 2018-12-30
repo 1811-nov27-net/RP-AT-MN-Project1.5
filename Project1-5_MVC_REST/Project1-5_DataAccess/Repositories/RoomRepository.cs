@@ -20,7 +20,7 @@ namespace Project1_5_DataAccess.Repositories
             _db = db ?? throw new ArgumentNullException(nameof(db));
 
             // code-first style, make sure the database exists by now.
-           // db.Database.EnsureCreated();
+           db.Database.EnsureCreated();
         }
 
 
@@ -103,11 +103,6 @@ namespace Project1_5_DataAccess.Repositories
         public async Task SaveChangesAsync()
         {
             _db.SaveChanges();
-        }
-
-        public Task Delete(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

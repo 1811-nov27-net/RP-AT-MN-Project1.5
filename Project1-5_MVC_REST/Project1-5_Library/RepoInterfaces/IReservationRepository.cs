@@ -2,19 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Project1_5_Library.RepoInterfaces
 {
     public interface IReservationRepository
     {
-        IEnumerable GetAll();
-        Reservation GetById(int id);
+        Task<IList<Reservation>> GetAllAsync();
+        Task<Reservation> GetByIdAsync(int id);
 
-        Reservation Create(Reservation model);
-        Reservation Update(Reservation model, int? id = null);
+        Task<Reservation> CreateAsync(Reservation model);
+        Task<Reservation> UpdateAsync(Reservation model, int? id = null);
 
-        void Delete(int id);
+        Task DeleteAsync(int id);
 
-        void SaveChanges();
+        Task<IList<Reservation>> GetByCustomerIdAsync(int id);
+
+        Task SaveChangesAsync();
     }
 }
