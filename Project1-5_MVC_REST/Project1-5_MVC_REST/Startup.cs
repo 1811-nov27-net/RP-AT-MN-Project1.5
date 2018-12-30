@@ -37,6 +37,7 @@ namespace Project1_5_MVC_REST
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IEventCustomerRepository, EventCustomerRepository>();
 
             //Mapper
             Mapper.Initialize(cfg => {

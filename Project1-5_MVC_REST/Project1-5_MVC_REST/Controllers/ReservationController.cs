@@ -6,29 +6,30 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project1_5_Library;
 using Project1_5_Library.RepoInterfaces;
+using Project1_5_Library.Exceptions;
 
 namespace Project1_5_MVC_REST.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventController : ControllerBase
+    public class ReservationController : ControllerBase
     {
-        private IEventRepository Repository { get; set; }
-        private ICustomerRepository CustomerRepository { get; set; }
+        private IReservationRepository Repository { get; set; }
+        private IRoomRepository RoomRepository { get; set; }
 
-        public EventController(IEventRepository _respository, ICustomerRepository _customerRepository)
+        public ReservationController(IReservationRepository _respository, IRoomRepository _roomRepository)
         {
             Repository = _respository;
-            CustomerRepository = _customerRepository;
+            RoomRepository = _roomRepository;
         }
 
-        // GET: api/Event
+        // GET: api/Reservation
         [HttpGet]
-        public ActionResult<IList<Event>> Get()
+        public ActionResult<IList<Reservation>> Get()
         {
             try
             {
-                List<Event> list = (List<Event>)Repository.GetAll();
+                List<Reservation> list = (List<Reservation>)Repository.GetAll();
                 return list;
             }
             catch (Exception ex)
@@ -37,35 +38,47 @@ namespace Project1_5_MVC_REST.Controllers
             }
         }
 
-        // GET: api/Event/5
-        [HttpGet("{id}", Name = "GetEvent")]
-        public ActionResult<Event> Get(int id)
+        // GET: api/Reservation/5
+        [HttpGet("{id}", Name = "GetReservation")]
+        public ActionResult<Reservation> Get(int id)
         {
-            Event evtDB;
+            Reservation reservationDB;
             try
             {
-                evtDB = Repository.GetById(id);
+                reservationDB = Repository.GetById(id);
             }
             catch (Exception ex)
             {
                 // internal server error
                 return StatusCode(500, ex);
             }
-            if (evtDB == null)
+            if (reservationDB == null)
             {
                 return NotFound(); // if resource doesn't exist, i'll return an error
             }
-            return evtDB; // success = Ok()
+            return reservationDB; // success = Ok()
         }
 
-        // POST: api/Event
+        // POST: api/Reservation
         [HttpPost]
-        public ActionResult Post([FromBody] Event evt)
+        public ActionResult Post([FromBody] Reservation reservation)
         {
             try
             {
-                evt = Repository.Create(evt);
+                //Need this to calculate Cost, based on Room
+                reservation.Room = RoomRepository.GetById(reservation.RoomId);
+
+                reservation.calculateCost();
+                reservation = Repository.Create(reservation);
                 Repository.SaveChanges();
+            }
+            catch (SameDateException ex)
+            {
+                return BadRequest(ex);
+            }
+            catch (EndDateBeforeStartDateException ex)
+            {
+                return BadRequest(ex);
             }
             catch (Exception ex)
             {
@@ -74,35 +87,47 @@ namespace Project1_5_MVC_REST.Controllers
             }
             // return proper 201 Created response, based on correct route for get-by-ID,
             // and return the representation of the object.
-            return CreatedAtRoute("GetEvent", new { id = evt.Id }, evt);
+            return CreatedAtRoute("GetReservation", new { id = reservation.Id }, reservation);
         }
 
-        // PUT: api/Event/5
+        // PUT: api/Reservation/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Event evt)
+        public ActionResult Put(int id, [FromBody] Reservation reservation)
         {
-            Event evtDB;
+            Reservation reservationDB;
             try
             {
-                evtDB = Repository.GetById(id);
+                reservationDB = Repository.GetById(id);
             }
             catch (Exception ex)
             {
                 // internal server error
                 return StatusCode(500, ex);
             }
-            if (evtDB == null)
+            if (reservationDB == null)
             {
                 return NotFound(); // if resource doesn't exist, i'll return an error
             }
-            if (id != evtDB.Id)
+            if (id != reservationDB.Id)
             {
                 return BadRequest("cannot change ID");
             }
             try
             {
-                Repository.Update(evt, id);
+                //Need this to calculate Cost, based on Room
+                reservation.Room = RoomRepository.GetById(reservation.RoomId);
+
+                reservation.calculateCost();
+                Repository.Update(reservation, id);
                 Repository.SaveChanges();
+            }
+            catch (SameDateException ex)
+            {
+                return BadRequest(ex);
+            }
+            catch (EndDateBeforeStartDateException ex)
+            {
+                return BadRequest(ex);
             }
             catch (Exception ex)
             {
@@ -117,15 +142,15 @@ namespace Project1_5_MVC_REST.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            Event evtDB;
+            Reservation reservationDB;
             try
             {
-                evtDB = Repository.GetById(id);
-                if (evtDB == null)
+                reservationDB = Repository.GetById(id);
+                if (reservationDB == null)
                 {
                     return NotFound(); // if resource doesn't exist, i'll return an error
                 }
-                evtDB = null;
+                reservationDB = null;
 
                 Repository.Delete(id);
                 Repository.SaveChanges();

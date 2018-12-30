@@ -11,24 +11,22 @@ namespace Project1_5_MVC_REST.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventController : ControllerBase
+    public class EventCustomerController : ControllerBase
     {
-        private IEventRepository Repository { get; set; }
-        private ICustomerRepository CustomerRepository { get; set; }
+        private IEventCustomerRepository Repository { get; set; }
 
-        public EventController(IEventRepository _respository, ICustomerRepository _customerRepository)
+        public EventCustomerController(IEventCustomerRepository _respository)
         {
             Repository = _respository;
-            CustomerRepository = _customerRepository;
         }
 
-        // GET: api/Event
+        // GET: api/EventCustomer
         [HttpGet]
-        public ActionResult<IList<Event>> Get()
+        public ActionResult<IList<EventCustomer>> Get()
         {
             try
             {
-                List<Event> list = (List<Event>)Repository.GetAll();
+                List<EventCustomer> list = (List<EventCustomer>)Repository.GetAll();
                 return list;
             }
             catch (Exception ex)
@@ -37,34 +35,34 @@ namespace Project1_5_MVC_REST.Controllers
             }
         }
 
-        // GET: api/Event/5
-        [HttpGet("{id}", Name = "GetEvent")]
-        public ActionResult<Event> Get(int id)
+        // GET: api/EventCustomer/5
+        [HttpGet("{id}", Name = "GetEventCustomer")]
+        public ActionResult<EventCustomer> Get(int id)
         {
-            Event evtDB;
+            EventCustomer customerDB;
             try
             {
-                evtDB = Repository.GetById(id);
+                customerDB = Repository.GetById(id);
             }
             catch (Exception ex)
             {
                 // internal server error
                 return StatusCode(500, ex);
             }
-            if (evtDB == null)
+            if (customerDB == null)
             {
                 return NotFound(); // if resource doesn't exist, i'll return an error
             }
-            return evtDB; // success = Ok()
+            return customerDB; // success = Ok()
         }
 
-        // POST: api/Event
+        // POST: api/EventCustomer
         [HttpPost]
-        public ActionResult Post([FromBody] Event evt)
+        public ActionResult Post([FromBody] EventCustomer customer)
         {
             try
             {
-                evt = Repository.Create(evt);
+                customer = Repository.Create(customer);
                 Repository.SaveChanges();
             }
             catch (Exception ex)
@@ -74,34 +72,34 @@ namespace Project1_5_MVC_REST.Controllers
             }
             // return proper 201 Created response, based on correct route for get-by-ID,
             // and return the representation of the object.
-            return CreatedAtRoute("GetEvent", new { id = evt.Id }, evt);
+            return CreatedAtRoute("GetEventCustomer", new { id = customer.Id }, customer);
         }
 
-        // PUT: api/Event/5
+        // PUT: api/EventCustomer/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Event evt)
+        public ActionResult Put(int id, [FromBody] EventCustomer customer)
         {
-            Event evtDB;
+            EventCustomer customerDB;
             try
             {
-                evtDB = Repository.GetById(id);
+                customerDB = Repository.GetById(id);
             }
             catch (Exception ex)
             {
                 // internal server error
                 return StatusCode(500, ex);
             }
-            if (evtDB == null)
+            if (customerDB == null)
             {
                 return NotFound(); // if resource doesn't exist, i'll return an error
             }
-            if (id != evtDB.Id)
+            if (id != customerDB.Id)
             {
                 return BadRequest("cannot change ID");
             }
             try
             {
-                Repository.Update(evt, id);
+                Repository.Update(customer, id);
                 Repository.SaveChanges();
             }
             catch (Exception ex)
@@ -117,15 +115,15 @@ namespace Project1_5_MVC_REST.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            Event evtDB;
+            EventCustomer customerDB;
             try
             {
-                evtDB = Repository.GetById(id);
-                if (evtDB == null)
+                customerDB = Repository.GetById(id);
+                if (customerDB == null)
                 {
                     return NotFound(); // if resource doesn't exist, i'll return an error
                 }
-                evtDB = null;
+                customerDB = null;
 
                 Repository.Delete(id);
                 Repository.SaveChanges();
