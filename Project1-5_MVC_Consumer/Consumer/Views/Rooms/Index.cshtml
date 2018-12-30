@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Project1_5_Library.Room>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="CreateAsync">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Beds)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reserved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Beds)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reserved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomType)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditAsync", new { id = item.Id }) |
+                @Html.ActionLink("Details", "DetailsAsync", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteAsync", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
