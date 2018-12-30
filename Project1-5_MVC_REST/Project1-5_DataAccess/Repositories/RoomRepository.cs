@@ -5,6 +5,7 @@ using Project1_5_Library.RepoInterfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace Project1_5_DataAccess.Repositories
@@ -80,6 +81,26 @@ namespace Project1_5_DataAccess.Repositories
         public void SaveChanges()
         {
             _db.SaveChanges();
+        }
+
+        public IList<Room> CheckRoomAvailability(DateTime beginDate)
+        {
+            List<Rooms> roomsAvailable = new List<Rooms>();
+
+            roomsAvailable = _db.Rooms
+                        .FromSql(
+                            "SELECT * "+
+                            "from Hotel.rooms " +
+                            "where id not in " +
+                            "( " +
+                            "    select distinct RoomId " +
+                            "    from Hotel.Reservation " +
+                            "    where EndDate >= @beginDate" +
+                            ")",
+                            new SqlParameter("@beginDate", beginDate)
+                        ).ToList();
+
+            return Mapper.Map<List<Rooms>, List<Room>>(roomsAvailable);
         }
     }
 }

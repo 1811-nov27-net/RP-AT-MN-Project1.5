@@ -9,6 +9,7 @@ namespace Project1_5_Library.RepoInterfaces
     {
         IEnumerable GetAll();
         EventCustomer GetById(int id);
+        IEnumerable GetByCustomerId(int id);
 
         EventCustomer Create(EventCustomer model);
         EventCustomer Update(EventCustomer model, int? id = null);
