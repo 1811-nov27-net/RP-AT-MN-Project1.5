@@ -2,21 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Project1_5_Library.RepoInterfaces
 {
     public interface IRoomRepository
     {
-        IEnumerable GetAll();
-        Room GetById(int id);
+        Task<IList<Room>> GetAllAsync();
+        Task<Room> GetByIdAsync(int id);
 
-        Room Create(Room model);
-        Room Update(Room model, int? id = null);
+        Task<Room> CreateAsync(Room model);
+        Task<Room> UpdateAsync(Room model, int? id = null);
 
-        void Delete(int id);
+        Task DeleteAsync(int id);
 
-        void SaveChanges();
+        Task SaveChangesAsync();
 
-        IList<Room> CheckRoomAvailability(DateTime beginDate);
+        Task<IList<Room>> CheckRoomAvailabilityAsync(DateTime beginDate);
     }
 }

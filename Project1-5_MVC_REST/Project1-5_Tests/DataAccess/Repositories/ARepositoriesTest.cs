@@ -4,6 +4,7 @@ using Project1_5_Library;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Project1_5_Tests.DataAccess.Repositories
 {
@@ -40,14 +41,14 @@ namespace Project1_5_Tests.DataAccess.Repositories
             }
         }
 
-        public abstract void CreateWorks();
-        public abstract void UpdateWorks();
-        public abstract void UpdateWithWrongIdShouldReturnException();
-        public abstract void UpdateWithNoIdShouldReturnException();
-        public abstract void GetAllWorks();
-        public abstract void GetByIdWorks();
-        public abstract void GetByIdThatDoesntExistReturnsNull();
-        public abstract void DeleteWorks();
-        public abstract void DeleteWithIdThatDoesntExistThrowsException();
+        public abstract Task CreateWorksAsync();
+        public abstract Task UpdateWorksAsync();
+        public abstract Task UpdateWithWrongIdShouldReturnExceptionAsync();
+        public abstract Task UpdateWithNoIdShouldReturnExceptionAsync();
+        public abstract Task GetAllWorksAsync();
+        public abstract Task GetByIdWorksAsync();
+        public abstract Task GetByIdThatDoesntExistReturnsNullAsync();
+        public abstract Task DeleteWorksAsync();
+        public abstract Task DeleteWithIdThatDoesntExistThrowsExceptionAsync();
     }
 }

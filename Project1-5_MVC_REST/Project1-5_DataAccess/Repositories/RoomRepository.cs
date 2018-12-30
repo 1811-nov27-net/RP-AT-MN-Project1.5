@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Project1_5_DataAccess.Repositories
 {
@@ -22,7 +23,22 @@ namespace Project1_5_DataAccess.Repositories
            // db.Database.EnsureCreated();
         }
 
-        public Room Create(Room model)
+
+        public async Task<IList<Room>> GetAllAsync()
+        {
+            List<Rooms> list = _db.Rooms
+                                    .OrderBy(m => m.Id)
+                                    .ToList();
+
+            return Mapper.Map<List<Rooms>, List<Room>>(list);
+        }
+
+        public async Task<Room> GetByIdAsync(int id)
+        {
+            return Mapper.Map<Rooms, Room>(_db.Rooms.Find(id));
+        }
+
+        public async Task<Room> CreateAsync(Room model)
         {
             Rooms room = Mapper.Map<Room, Rooms>(model);
 
@@ -32,32 +48,7 @@ namespace Project1_5_DataAccess.Repositories
             return model;
         }
 
-        public void Delete(int id)
-        {
-            //Rooms tracked = Mapper.Map<Room, Rooms>(GetById(id));
-            Rooms tracked = _db.Rooms.Find(id);
-            if (tracked == null)
-            {
-                throw new ArgumentException("No Room with this id", nameof(id));
-            }
-            _db.Remove(tracked);
-        }
-
-        public IEnumerable GetAll()
-        {
-            List<Rooms> list = _db.Rooms
-                                    .OrderBy(m => m.Id)
-                                    .ToList();
-
-            return Mapper.Map<List<Rooms>, List<Room>>(list);
-        }
-
-        public Room GetById(int id)
-        {
-            return Mapper.Map<Rooms, Room>(_db.Rooms.Find(id));
-        }
-
-        public Room Update(Room model, int? id = null)
+        public async Task<Room> UpdateAsync(Room model, int? id = null)
         {
             Rooms room = Mapper.Map<Room, Rooms>(model);
 
@@ -78,18 +69,24 @@ namespace Project1_5_DataAccess.Repositories
             return model;
         }
 
-        public void SaveChanges()
+        public async Task DeleteAsync(int id)
         {
-            _db.SaveChanges();
+            //Rooms tracked = Mapper.Map<Room, Rooms>(GetById(id));
+            Rooms tracked = _db.Rooms.Find(id);
+            if (tracked == null)
+            {
+                throw new ArgumentException("No Room with this id", nameof(id));
+            }
+            _db.Remove(tracked);
         }
 
-        public IList<Room> CheckRoomAvailability(DateTime beginDate)
+        public async Task<IList<Room>> CheckRoomAvailabilityAsync(DateTime beginDate)
         {
             List<Rooms> roomsAvailable = new List<Rooms>();
 
             roomsAvailable = _db.Rooms
                         .FromSql(
-                            "SELECT * "+
+                            "SELECT * " +
                             "from Hotel.rooms " +
                             "where id not in " +
                             "( " +
@@ -101,6 +98,16 @@ namespace Project1_5_DataAccess.Repositories
                         ).ToList();
 
             return Mapper.Map<List<Rooms>, List<Room>>(roomsAvailable);
+        }
+        
+        public async Task SaveChangesAsync()
+        {
+            _db.SaveChanges();
+        }
+
+        public Task Delete(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

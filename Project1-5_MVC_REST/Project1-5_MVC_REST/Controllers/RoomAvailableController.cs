@@ -21,12 +21,12 @@ namespace Project1_5_MVC_REST.Controllers
         // GET: api/RoomAvailable/aaaa-MM-dd
         [HttpGet("{stringDate}", Name = "CheckRoomAvailability")]
         [Route("api/RoomAvailable/{stringDate}")]
-        public ActionResult<IList<Room>> CheckRoomAvailability(string stringDate)
+        public async Task<ActionResult<IList<Room>>> CheckRoomAvailabilityAsync(string stringDate)
         {
             try
             {
                 DateTime date = DateTime.Parse(stringDate);
-                List<Room> list = (List<Room>)Repository.CheckRoomAvailability(date);
+                List<Room> list = (List<Room>) await Repository.CheckRoomAvailabilityAsync(date);
                 return list;
             }
             catch (Exception ex)
