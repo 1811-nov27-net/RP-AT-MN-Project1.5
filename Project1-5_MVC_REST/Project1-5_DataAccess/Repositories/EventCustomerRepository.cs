@@ -25,22 +25,31 @@ namespace Project1_5_DataAccess.Repositories
         public async Task<IList<EventCustomer>> GetAllAsync()
         {
             List<EventsCustomers> list = _db.EventsCustomers
-                                        /*.Include(ec => ec.Customer)
-                                        .Include(ev => ev.Event)*/
+                                        .Include(ec => ec.Customer)
+                                        .Include(ev => ev.Event)
                                         .OrderBy(m => m.Id)
                                         .ToList();
+
+            foreach(var item in list)
+            {
+                item.Customer.EventsCustomers = null;
+                item.Event.EventsCustomers = null;
+            }
 
             return Mapper.Map<List<EventsCustomers>, List<EventCustomer>>(list);
         }
 
         public async Task<EventCustomer> GetByIdAsync(int id)
         {
-            return Mapper.Map<EventsCustomers, EventCustomer>(
-                                                                _db.EventsCustomers
-                                                                //.Include(ec => ec.Customer)
-                                                                //.Include(ev => ev.Event)
-                                                                .SingleOrDefault(e => e.Id == id)
-                                                             );
+            EventsCustomers eventCustomer = _db.EventsCustomers
+                                            .Include(ec => ec.Customer)
+                                            .Include(ev => ev.Event)
+                                            .SingleOrDefault(e => e.Id == id);
+
+            eventCustomer.Customer.EventsCustomers = null;
+            eventCustomer.Event.EventsCustomers = null;
+
+            return Mapper.Map<EventsCustomers, EventCustomer>(eventCustomer);
         }
 
         public async Task<EventCustomer> CreateAsync(EventCustomer model)
