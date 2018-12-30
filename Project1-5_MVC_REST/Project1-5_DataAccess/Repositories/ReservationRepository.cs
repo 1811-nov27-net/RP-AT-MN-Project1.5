@@ -41,8 +41,14 @@ namespace Project1_5_DataAccess.Repositories
 
         public async Task<Reservation> GetByIdAsync(int id)
         {
-            Reservations reservation = _db.Reservation.Include(r => r.Customer).Where(r => r.Id == id).FirstOrDefault();
+            Reservations reservation = _db.Reservation
+                                            .Include(r => r.Customer)
+                                            .Include(r => r.Room)
+                                            .Where(r => r.Id == id)
+                                            .FirstOrDefault();
+
             reservation.Customer.Reservation = null;
+            reservation.Room.Reservation = null;
 
             return Mapper.Map<Reservations, Reservation>(reservation);
         }
