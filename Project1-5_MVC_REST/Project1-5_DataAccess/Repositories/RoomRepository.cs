@@ -104,5 +104,10 @@ namespace Project1_5_DataAccess.Repositories
         {
             _db.SaveChanges();
         }
+
+        public Task Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

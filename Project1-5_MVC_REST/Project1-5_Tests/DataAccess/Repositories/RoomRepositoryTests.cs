@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Project1_5_Tests.DataAccess.Repositories
@@ -16,7 +17,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
         public RoomRepositoryTests() : base() {}
 
         [Fact]
-        public override void CreateWorks()
+        public override async Task CreateWorksAsync()
         {
             Room roomSaved = null;
 
@@ -32,8 +33,8 @@ namespace Project1_5_Tests.DataAccess.Repositories
 
                 //Create customer
                 Room room = new Room { Beds = 1, Cost = 50, RoomType = "Standard" };
-                roomSaved = repo.Create(room);
-                repo.SaveChanges();
+                roomSaved = await repo.CreateAsync(room);
+                await repo.SaveChangesAsync();
             }
 
             // assert (for assert, once again use the context directly for verify.)
@@ -51,7 +52,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override void DeleteWithIdThatDoesntExistThrowsException()
+        public override async Task DeleteWithIdThatDoesntExistThrowsExceptionAsync()
         {
             int id = 1000;
 
@@ -65,16 +66,16 @@ namespace Project1_5_Tests.DataAccess.Repositories
             {
                 var repo = new RoomRepository(db);
 
-                Room room = repo.GetById(id);
+                Room room = await repo.GetByIdAsync(id);
 
                 Assert.Null(room);
 
-                Assert.Throws<ArgumentException>(() => repo.Delete(id));
+                await Assert.ThrowsAsync<ArgumentException>(() => repo.DeleteAsync(id));
             }
         }
 
         [Fact]
-        public override void DeleteWorks()
+        public override async Task DeleteWorksAsync()
         {
             Room roomSaved = null;
             int id = 0;
@@ -91,8 +92,8 @@ namespace Project1_5_Tests.DataAccess.Repositories
 
                 //Create customer
                 Room room = new Room { Beds = 1, Cost = 50, RoomType = "Standard" };
-                roomSaved = repo.Create(room);
-                repo.SaveChanges();
+                roomSaved = await repo.CreateAsync(room);
+                await repo.SaveChangesAsync();
 
                 id = roomSaved.Id;
             }
@@ -101,7 +102,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
             using (var db = new Project15Context(options))
             {
                 var repo = new RoomRepository(db);
-                Room room = repo.GetById(id);
+                Room room = await repo.GetByIdAsync(id);
 
                 Assert.NotEqual(0, room.Id); // should get some generated ID
                 Assert.Equal(roomSaved.Id, room.Id);
@@ -109,16 +110,16 @@ namespace Project1_5_Tests.DataAccess.Repositories
                 Assert.Equal(50, room.Cost);
                 Assert.Equal("Standard", room.RoomType);
 
-                repo.Delete(id);
-                repo.SaveChanges();
-                room = repo.GetById(id);
+                await repo.DeleteAsync(id);
+                await repo.SaveChangesAsync();
+                room = await repo.GetByIdAsync(id);
 
                 Assert.Null(room);
             }
         }
 
         [Fact]
-        public override void GetAllWorks()
+        public override async Task GetAllWorksAsync()
         {
             List<Room> list = new List<Room>();
             Room roomSaved = null;
@@ -139,8 +140,8 @@ namespace Project1_5_Tests.DataAccess.Repositories
                         Beds = 3,
                         RoomType = $"Room {i}"
                     };
-                    roomSaved = repo.Create(room);
-                    repo.SaveChanges();
+                    roomSaved = await repo.CreateAsync(room);
+                    await repo.SaveChangesAsync();
                     list.Add(roomSaved);
                 }
             }
@@ -149,7 +150,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
             using(var db = new Project15Context(options))
             {
                 var repo = new RoomRepository(db);
-                List<Room> rooms = (List<Room>)repo.GetAll();
+                List<Room> rooms = (List<Room>) await repo.GetAllAsync();
 
                 // should equal the same amount of rooms
                 Assert.Equal(list.Count, rooms.Count);
@@ -166,7 +167,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override void GetByIdThatDoesntExistReturnsNull()
+        public override async Task GetByIdThatDoesntExistReturnsNullAsync()
         {
             int id = 1000;
 
@@ -179,7 +180,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
             {
                 var repo = new RoomRepository(db);
 
-                Room room = repo.GetById(id);
+                Room room = await repo.GetByIdAsync(id);
 
                 Assert.Null(room);
 
@@ -187,7 +188,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override void GetByIdWorks()
+        public override async Task GetByIdWorksAsync()
         {
             int id = 0;
 
@@ -195,7 +196,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
 
             // arrange (use the context directly - we assume that works)
             var options = new DbContextOptionsBuilder<Project15Context>()
-                .UseInMemoryDatabase("db_room_test_create").Options;
+                .UseInMemoryDatabase("db_room_test_getbyid").Options;
             using (var db = new Project15Context(options)) ;
 
             // act (for act, only use the repo, to test it)
@@ -205,8 +206,8 @@ namespace Project1_5_Tests.DataAccess.Repositories
 
                 //Create customer
                 Room room = new Room { Beds = 1, Cost = 50, RoomType = "Standard" };
-                roomSaved = repo.Create(room);
-                repo.SaveChanges();
+                roomSaved = await repo.CreateAsync(room);
+                await repo.SaveChangesAsync();
                 id = roomSaved.Id;
             }
 
@@ -214,7 +215,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
             using (var db = new Project15Context(options))
             {
                 var repo = new RoomRepository(db);
-                Room room = repo.GetById(id);
+                Room room = await repo.GetByIdAsync(id);
 
                 Assert.NotEqual(0, room.Id);
                 Assert.Equal(1, room.Beds);
@@ -223,7 +224,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override void UpdateWithNoIdShouldReturnException()
+        public override async Task UpdateWithNoIdShouldReturnExceptionAsync()
         {
             int id = 1000;
 
@@ -238,16 +239,16 @@ namespace Project1_5_Tests.DataAccess.Repositories
             {
                 var repo = new RoomRepository(db);
 
-                Room room = repo.GetById(id);
+                Room room = await repo.GetByIdAsync(id);
 
                 Assert.Null(room);
 
-                Assert.Throws<ArgumentException>(() => repo.Update(room, id));
+                await Assert.ThrowsAsync<ArgumentException>(() => repo.UpdateAsync(room, id));
             }
         }
 
         [Fact]
-        public override void UpdateWithWrongIdShouldReturnException()
+        public override async Task UpdateWithWrongIdShouldReturnExceptionAsync()
         {
             int id = 0;
             int wronId = 10;
@@ -270,8 +271,8 @@ namespace Project1_5_Tests.DataAccess.Repositories
                     RoomType = "Standard"
                 };
 
-                roomSaved = repo.Create(room);
-                repo.SaveChanges();
+                roomSaved = await repo.CreateAsync(room);
+                await repo.SaveChangesAsync();
 
                 id = roomSaved.Id;
 
@@ -281,13 +282,13 @@ namespace Project1_5_Tests.DataAccess.Repositories
             {
                 var repo = new RoomRepository(db);
 
-                Room room = repo.GetById(id);
+                Room room = await repo.GetByIdAsync(id);
 
                 Assert.NotEqual(0, room.Id);
                 Assert.Equal(500, room.Cost);
                 Assert.Equal("Standard", room.RoomType);
 
-                Assert.Throws<ArgumentException>(() => repo.Update(room, wronId));
+                await Assert.ThrowsAsync<ArgumentException>(() => repo.UpdateAsync(room, wronId));
 
             }
 
@@ -296,7 +297,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override void UpdateWorks()
+        public override async Task UpdateWorksAsync()
         {
             int id = 0;
             Room roomSaved = null;
@@ -318,8 +319,8 @@ namespace Project1_5_Tests.DataAccess.Repositories
                     RoomType = "Standard"
                 };
 
-                roomSaved = repo.Create(room);
-                repo.SaveChanges();
+                roomSaved = await repo.CreateAsync(room);
+                await repo.SaveChangesAsync();
 
                 id = roomSaved.Id;
 
@@ -328,7 +329,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
             using (var db = new Project15Context(options))
             {
                 var repo = new RoomRepository(db);
-                Room room = repo.GetById(id);
+                Room room = await repo.GetByIdAsync(id);
 
                 Assert.NotEqual(0, room.Id);
                 Assert.Equal(500, room.Cost);
@@ -337,17 +338,14 @@ namespace Project1_5_Tests.DataAccess.Repositories
                 room.Cost = 400;
                 room.RoomType = "Suite";
 
-                repo.Update(room, id);
-                repo.SaveChanges();
+                await repo.UpdateAsync(room, id);
+                await repo.SaveChangesAsync();
 
-                room = repo.GetById(room.Id);
+                room = await repo.GetByIdAsync(room.Id);
 
                 Assert.NotEqual(0, room.Id);
                 Assert.Equal(400, room.Cost);
                 Assert.Equal("Suite", room.RoomType);
-
-
-
             }
 
         }
