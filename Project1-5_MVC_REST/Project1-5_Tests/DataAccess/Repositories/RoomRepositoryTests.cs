@@ -4,6 +4,8 @@ using Project1_5_DataAccess;
 using Project1_5_DataAccess.Repositories;
 using Project1_5_Library;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Xunit;
 
@@ -51,7 +53,24 @@ namespace Project1_5_Tests.DataAccess.Repositories
         [Fact]
         public override void DeleteWithIdThatDoesntExistThrowsException()
         {
-            throw new NotImplementedException();
+            int id = 1000;
+
+            // arrange (use the context directl - we assume that it works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("dp_room_test-delete").Options;
+
+            using (var db = new Project15Context(options));
+
+            using(var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = repo.GetById(id);
+
+                Assert.Null(room);
+
+                Assert.Throws<ArgumentException>(() => repo.Delete(id));
+            }
         }
 
         [Fact]
@@ -63,7 +82,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
             // arrange (use the context directly - we assume that works)
             var options = new DbContextOptionsBuilder<Project15Context>()
                 .UseInMemoryDatabase("db_room_test_delete").Options;
-            using (var db = new Project15Context(options)) ;
+            using (var db = new Project15Context(options));
 
             // act (for act, only use the repo, to test it)
             using (var db = new Project15Context(options))
@@ -101,37 +120,236 @@ namespace Project1_5_Tests.DataAccess.Repositories
         [Fact]
         public override void GetAllWorks()
         {
-            throw new NotImplementedException();
+            List<Room> list = new List<Room>();
+            Room roomSaved = null;
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_room_test_getAll").Options;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                for(int i = 0; i < 10; i++)
+                {
+                    Room room = new Room
+                    {
+                        Cost = 150,
+                        Beds = 3,
+                        RoomType = $"Room {i}"
+                    };
+                    roomSaved = repo.Create(room);
+                    repo.SaveChanges();
+                    list.Add(roomSaved);
+                }
+            }
+            
+            // asssert (for assert, once again use the context directly for verification.)
+            using(var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+                List<Room> rooms = (List<Room>)repo.GetAll();
+
+                // should equal the same amount of rooms
+                Assert.Equal(list.Count, rooms.Count);
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    Assert.Equal(list[i].Cost, rooms[i].Cost);
+                    Assert.Equal(list[i].Beds, rooms[i].Beds);
+                    Assert.Equal(list[i].RoomType, rooms[i].RoomType);
+
+                }
+            }
+
         }
 
         [Fact]
         public override void GetByIdThatDoesntExistReturnsNull()
         {
-            throw new NotImplementedException();
+            int id = 1000;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                          .UseInMemoryDatabase("db_room_test_getAll").Options;
+
+            using (var db = new Project15Context(options));
+
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = repo.GetById(id);
+
+                Assert.Null(room);
+
+            }
         }
 
         [Fact]
         public override void GetByIdWorks()
         {
-            throw new NotImplementedException();
+            int id = 0;
+
+            Room roomSaved = null;
+
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_room_test_create").Options;
+            using (var db = new Project15Context(options)) ;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                //Create customer
+                Room room = new Room { Beds = 1, Cost = 50, RoomType = "Standard" };
+                roomSaved = repo.Create(room);
+                repo.SaveChanges();
+                id = roomSaved.Id;
+            }
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+                Room room = repo.GetById(id);
+
+                Assert.NotEqual(0, room.Id);
+                Assert.Equal(1, room.Beds);
+                Assert.Equal("Standard", room.RoomType);
+            }
         }
 
         [Fact]
         public override void UpdateWithNoIdShouldReturnException()
         {
-            throw new NotImplementedException();
+            int id = 1000;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                          .UseInMemoryDatabase("db_room_test_getAll").Options;
+
+            // arrange (use the context directly - we assume that works)
+            using (var db = new Project15Context(options)) ;          
+            
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = repo.GetById(id);
+
+                Assert.Null(room);
+
+                Assert.Throws<ArgumentException>(() => repo.Update(room, id));
+            }
         }
 
         [Fact]
-        public override void UpdateWithWorngIdShouldReturnException()
+        public override void UpdateWithWrongIdShouldReturnException()
         {
-            throw new NotImplementedException();
+            int id = 0;
+            int wronId = 10;
+            Room roomSaved = null;
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_rooms_test_update").Options;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options));
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = new Room
+                {
+                    Cost = 500,
+                    RoomType = "Standard"
+                };
+
+                roomSaved = repo.Create(room);
+                repo.SaveChanges();
+
+                id = roomSaved.Id;
+
+            }
+
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = repo.GetById(id);
+
+                Assert.NotEqual(0, room.Id);
+                Assert.Equal(500, room.Cost);
+                Assert.Equal("Standard", room.RoomType);
+
+                Assert.Throws<ArgumentException>(() => repo.Update(room, wronId));
+
+            }
+
+
+
         }
 
         [Fact]
         public override void UpdateWorks()
         {
-            throw new NotImplementedException();
+            int id = 0;
+            Room roomSaved = null;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+              .UseInMemoryDatabase("db_rooms_test_update").Options;
+
+            // arrange (use the context directly - we assume that works)
+            using (var db = new Project15Context(options)) ;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = new Room
+                {
+                    Cost = 500,
+                    RoomType = "Standard"
+                };
+
+                roomSaved = repo.Create(room);
+                repo.SaveChanges();
+
+                id = roomSaved.Id;
+
+            }
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+                Room room = repo.GetById(id);
+
+                Assert.NotEqual(0, room.Id);
+                Assert.Equal(500, room.Cost);
+                Assert.Equal("Standard", room.RoomType);
+
+                room.Cost = 400;
+                room.RoomType = "Suite";
+
+                repo.Update(room, id);
+                repo.SaveChanges();
+
+                room = repo.GetById(room.Id);
+
+                Assert.NotEqual(0, room.Id);
+                Assert.Equal(400, room.Cost);
+                Assert.Equal("Suite", room.RoomType);
+
+
+
+            }
+
         }
     }
 }
