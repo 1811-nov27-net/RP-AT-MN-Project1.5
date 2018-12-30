@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Project1_5_DataAccess.Repositories
 {
@@ -20,8 +21,22 @@ namespace Project1_5_DataAccess.Repositories
             // code-first style, make sure the database exists by now.
             db.Database.EnsureCreated();
         }
+        
+        public async Task<IList<Event>> GetAllAsync()
+        {
+            List<Events> list = _db.Events
+                                        .OrderBy(m => m.Id)
+                                        .ToList();
 
-        public Event Create(Event model)
+            return Mapper.Map<List<Events>, List<Event>>(list);
+        }
+
+        public async Task<Event> GetByIdAsync(int id)
+        {
+            return Mapper.Map<Events, Event>(_db.Events.Find(id));
+        }
+
+        public async Task<Event> CreateAsync(Event model)
         {
             Events eventDataAccess = Mapper.Map<Event, Events>(model);
 
@@ -31,32 +46,7 @@ namespace Project1_5_DataAccess.Repositories
             return model;
         }
 
-        public void Delete(int id)
-        {
-            //Events tracked = Mapper.Map<Event, Events>(GetById(id));
-            Events tracked = _db.Events.Find(id);
-            if (tracked == null)
-            {
-                throw new ArgumentException("No Event with this id", nameof(id));
-            }
-            _db.Remove(tracked);
-        }
-
-        public IEnumerable GetAll()
-        {
-            List<Events> list = _db.Events
-                                        .OrderBy(m => m.Id)
-                                        .ToList();
-
-            return Mapper.Map<List<Events>, List<Event>>(list);
-        }
-
-        public Event GetById(int id)
-        {
-            return Mapper.Map<Events, Event>(_db.Events.Find(id));
-        }
-
-        public Event Update(Event model, int? id = null)
+        public async Task<Event> UpdateAsync(Event model, int? id = null)
         {
             Events eventDataAccess = Mapper.Map<Event, Events>(model);
 
@@ -77,7 +67,18 @@ namespace Project1_5_DataAccess.Repositories
             return model;
         }
 
-        public void SaveChanges()
+        public async Task DeleteAsync(int id)
+        {
+            //Events tracked = Mapper.Map<Event, Events>(GetById(id));
+            Events tracked = _db.Events.Find(id);
+            if (tracked == null)
+            {
+                throw new ArgumentException("No Event with this id", nameof(id));
+            }
+            _db.Remove(tracked);
+        }
+
+        public async Task SaveChangesAsync()
         {
             _db.SaveChanges();
         }

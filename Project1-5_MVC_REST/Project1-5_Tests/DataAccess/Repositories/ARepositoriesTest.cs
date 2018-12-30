@@ -41,7 +41,11 @@ namespace Project1_5_Tests.DataAccess.Repositories
             }
         }
 
+<<<<<<< HEAD
         public abstract Task CreateAsync();
+=======
+        public abstract Task CreateWorksAsync();
+>>>>>>> 5d8906040f8c3bc43df4c3e629e2e408ed464714
         public abstract Task UpdateWorksAsync();
         public abstract Task UpdateWithWrongIdShouldReturnExceptionAsync();
         public abstract Task UpdateWithNoIdShouldReturnExceptionAsync();

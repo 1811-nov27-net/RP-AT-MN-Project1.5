@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Project1_5_DataAccess.Repositories
 {
@@ -20,29 +21,8 @@ namespace Project1_5_DataAccess.Repositories
             // code-first style, make sure the database exists by now.
             db.Database.EnsureCreated();
         }
-
-        public EventCustomer Create(EventCustomer model)
-        {
-            EventsCustomers eventDataAccess = Mapper.Map<EventCustomer, EventsCustomers>(model);
-
-            _db.Add(eventDataAccess);
-
-            model = Mapper.Map<EventsCustomers, EventCustomer>(eventDataAccess);
-            return model;
-        }
-
-        public void Delete(int id)
-        {
-            //EventsCustomers tracked = Mapper.Map<Event, EventsCustomers>(GetById(id));
-            EventsCustomers tracked = _db.EventsCustomers.Find(id);
-            if (tracked == null)
-            {
-                throw new ArgumentException("No EventCustomerwith this id", nameof(id));
-            }
-            _db.Remove(tracked);
-        }
-
-        public IEnumerable GetAll()
+    
+        public async Task<IList<EventCustomer>> GetAllAsync()
         {
             List<EventsCustomers> list = _db.EventsCustomers
                                         /*.Include(ec => ec.Customer)
@@ -53,7 +33,7 @@ namespace Project1_5_DataAccess.Repositories
             return Mapper.Map<List<EventsCustomers>, List<EventCustomer>>(list);
         }
 
-        public EventCustomer GetById(int id)
+        public async Task<EventCustomer> GetByIdAsync(int id)
         {
             return Mapper.Map<EventsCustomers, EventCustomer>(
                                                                 _db.EventsCustomers
@@ -63,7 +43,17 @@ namespace Project1_5_DataAccess.Repositories
                                                              );
         }
 
-        public EventCustomer Update(EventCustomer model, int? id = null)
+        public async Task<EventCustomer> CreateAsync(EventCustomer model)
+        {
+            EventsCustomers eventDataAccess = Mapper.Map<EventCustomer, EventsCustomers>(model);
+
+            _db.Add(eventDataAccess);
+
+            model = Mapper.Map<EventsCustomers, EventCustomer>(eventDataAccess);
+            return model;
+        }
+
+        public async Task<EventCustomer> UpdateAsync(EventCustomer model, int? id = null)
         {
             EventsCustomers eventDataAccess = Mapper.Map<EventCustomer, EventsCustomers>(model);
 
@@ -84,7 +74,29 @@ namespace Project1_5_DataAccess.Repositories
             return model;
         }
 
-        public void SaveChanges()
+        public async Task DeleteAsync(int id)
+        {
+            //EventsCustomers tracked = Mapper.Map<Event, EventsCustomers>(GetById(id));
+            EventsCustomers tracked = _db.EventsCustomers.Find(id);
+            if (tracked == null)
+            {
+                throw new ArgumentException("No EventCustomerwith this id", nameof(id));
+            }
+            _db.Remove(tracked);
+        }
+
+        public async Task<IList<EventCustomer>> GetByCustomerIdAsync(int id)
+        {
+            return Mapper.Map<List<EventsCustomers>, List<EventCustomer>>(
+                                                                _db.EventsCustomers
+                                                                //.Include(ec => ec.Customer)
+                                                                .Include(ev => ev.Event)
+                                                                .Where(e => e.CustomerId == id)
+                                                                .ToList()
+                                                             );
+        }
+
+        public async Task SaveChangesAsync()
         {
             _db.SaveChanges();
         }

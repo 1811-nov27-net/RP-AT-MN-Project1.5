@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Project1_5_DataAccess.Repositories
 {
@@ -20,29 +21,8 @@ namespace Project1_5_DataAccess.Repositories
             // code-first style, make sure the database exists by now.
             db.Database.EnsureCreated();
         }
-
-        public Reservation Create(Reservation model)
-        {
-            Reservations reservation = Mapper.Map<Reservation, Reservations>(model);
-
-            _db.Add(reservation);
-
-            model = Mapper.Map<Reservations, Reservation>(reservation);
-            return model;
-        }
-
-        public void Delete(int id)
-        {
-            //Reservations tracked = Mapper.Map<Reservation, Reservations>(GetById(id));
-            Reservations tracked = _db.Reservation.Find(id);
-            if (tracked == null)
-            {
-                throw new ArgumentException("No Reservation with this id", nameof(id));
-            }
-            _db.Remove(tracked);
-        }
-
-        public IEnumerable GetAll()
+        
+        public async Task<IList<Reservation>> GetAllAsync()
         {
             List<Reservations> list = _db.Reservation
                                         /*.Include(c => c.Customer)
@@ -53,12 +33,25 @@ namespace Project1_5_DataAccess.Repositories
             return Mapper.Map<List<Reservations>, List<Reservation>>(list);
         }
 
-        public Reservation GetById(int id)
+        public async Task<Reservation> GetByIdAsync(int id)
         {
-            return Mapper.Map<Reservations, Reservation>(_db.Reservation.Find(id));
+            Reservations reservation = _db.Reservation.Include(r => r.Customer).Where(r => r.Id == id).FirstOrDefault();
+            reservation.Customer.Reservation = null;
+
+            return Mapper.Map<Reservations, Reservation>(reservation);
         }
 
-        public Reservation Update(Reservation model, int? id = null)
+        public async Task<Reservation> CreateAsync(Reservation model)
+        {
+            Reservations reservation = Mapper.Map<Reservation, Reservations>(model);
+
+            _db.Add(reservation);
+
+            model = Mapper.Map<Reservations, Reservation>(reservation);
+            return model;
+        }
+
+        public async Task<Reservation> UpdateAsync(Reservation model, int? id = null)
         {
             Reservations reservation = Mapper.Map<Reservation, Reservations>(model);
 
@@ -79,7 +72,23 @@ namespace Project1_5_DataAccess.Repositories
             return model;
         }
 
-        public void SaveChanges()
+        public async Task DeleteAsync(int id)
+        {
+            //Reservations tracked = Mapper.Map<Reservation, Reservations>(GetById(id));
+            Reservations tracked = _db.Reservation.Find(id);
+            if (tracked == null)
+            {
+                throw new ArgumentException("No Reservation with this id", nameof(id));
+            }
+            _db.Remove(tracked);
+        }
+
+        public async Task<IList<Reservation>> GetByCustomerIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SaveChangesAsync()
         {
             _db.SaveChanges();
         }

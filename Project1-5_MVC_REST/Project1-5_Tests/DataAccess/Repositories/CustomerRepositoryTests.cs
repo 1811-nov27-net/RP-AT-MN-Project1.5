@@ -15,7 +15,11 @@ namespace Project1_5_Tests.DataAccess.Repositories
         public CustomerRepositoryTests() : base() { }
         
         [Fact]
+<<<<<<< HEAD
         public override async Task CreateAsync()
+=======
+        public override async Task CreateWorksAsync()
+>>>>>>> 5d8906040f8c3bc43df4c3e629e2e408ed464714
         {
             Customer customerSaved = null;
 
@@ -31,8 +35,13 @@ namespace Project1_5_Tests.DataAccess.Repositories
 
                 //Create customer
                 Customer customer = new Customer { Name = "Axel", Email = "axel@yahoo.com", Address1 = "111 Arlington St." };
+<<<<<<< HEAD
                 customerSaved = await repo.Create(customer);
                 await repo.SaveChanges();
+=======
+                customerSaved = await repo.CreateAsync(customer);
+                await repo.SaveChangesAsync();
+>>>>>>> 5d8906040f8c3bc43df4c3e629e2e408ed464714
             }
 
             // assert (for assert, once again use the context directly for verify.)
