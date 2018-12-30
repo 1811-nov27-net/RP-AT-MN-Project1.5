@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Project1_5_DataAccess.Repositories
 {
@@ -21,7 +22,7 @@ namespace Project1_5_DataAccess.Repositories
             db.Database.EnsureCreated();
         }
 
-        public Customer Create(Customer model)
+        public async Task<Customer> Create(Customer model)
         {
             Customers customer = Mapper.Map<Customer, Customers>(model);
 
@@ -81,7 +82,7 @@ namespace Project1_5_DataAccess.Repositories
             return model;
         }
 
-        public void SaveChanges()
+        public async Task SaveChanges()
         {
             _db.SaveChanges();
         }

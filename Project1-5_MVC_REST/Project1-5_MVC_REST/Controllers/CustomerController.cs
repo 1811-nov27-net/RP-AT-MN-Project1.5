@@ -58,11 +58,11 @@ namespace Project1_5_MVC_REST.Controllers
 
         // POST: api/Customer
         [HttpPost]
-        public ActionResult Post([FromBody] Customer customer)
+        public async Task<ActionResult> Post([FromBody] Customer customer)
         {
             try
             {
-                customer = Repository.Create(customer);
+                customer = await Repository.Create(customer);
                 Repository.SaveChanges();
             }
             catch (Exception ex)
