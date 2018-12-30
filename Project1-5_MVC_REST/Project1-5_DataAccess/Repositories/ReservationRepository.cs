@@ -55,7 +55,16 @@ namespace Project1_5_DataAccess.Repositories
 
         public Reservation GetById(int id)
         {
-            return Mapper.Map<Reservations, Reservation>(_db.Reservation.Find(id));
+            Reservations reservation = _db.Reservation.Include(r => r.Customer).Where(r => r.Id == id).FirstOrDefault();
+            reservation.Customer.Reservation = null;
+
+            return Mapper.Map<Reservations, Reservation>(reservation);
+
+            /*Reservations reservation = _db.Reservation
+                                        .Include(r => r.Customer)
+                                        .Include(r => r.Room)
+                                        .Where(r => r.Id == id)
+                                        .FirstOrDefault();*/
         }
 
         public Reservation Update(Reservation model, int? id = null)
