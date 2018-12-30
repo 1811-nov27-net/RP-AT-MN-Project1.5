@@ -17,6 +17,6 @@ namespace Project1_5_Library.RepoInterfaces
 
         void SaveChanges();
 
-        //IList<Room> CheckRoomAvailability(DateTime beginDate);
+        IList<Room> CheckRoomAvailability(DateTime beginDate);
     }
 }
