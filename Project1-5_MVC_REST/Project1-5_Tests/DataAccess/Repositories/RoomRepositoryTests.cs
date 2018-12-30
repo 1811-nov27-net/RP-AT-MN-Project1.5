@@ -182,6 +182,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
                 Room room = repo.GetById(id);
 
                 Assert.Null(room);
+
             }
         }
 
@@ -224,7 +225,23 @@ namespace Project1_5_Tests.DataAccess.Repositories
         [Fact]
         public override void UpdateWithNoIdShouldReturnException()
         {
-            throw new NotImplementedException();
+            int id = 1000;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                          .UseInMemoryDatabase("db_room_test_getAll").Options;
+
+            using (var db = new Project15Context(options)) ;
+
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = repo.GetById(id);
+
+                Assert.Null(room);
+
+                Assert.Throws<ArgumentException>(() => repo.Update(room, id));
+            }
         }
 
         [Fact]
