@@ -24,13 +24,13 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/Checkout/5/3
         [HttpGet("{id}", Name = "Get")]
-        public ActionResult<decimal> Get(int id)
+        public async Task<ActionResult<decimal>> GetAsync(int id)
         {
             try
             {
                 decimal cost = 0;
 
-                Reservation reservation = Repository.GetById(id);
+                Reservation reservation = await Repository.GetByIdAsync(id);
 
                 if (reservation == null)
                 {
@@ -39,7 +39,7 @@ namespace Project1_5_MVC_REST.Controllers
 
                 cost += reservation.TotalCost;
 
-                List<EventCustomer> events = (List<EventCustomer>)EventRepository.GetByCustomerId(reservation.CustomerId);
+                List<EventCustomer> events = (List<EventCustomer>) await EventRepository.GetByCustomerIdAsync(reservation.CustomerId);
 
                 foreach(EventCustomer evt in events)
                 {
