@@ -81,5 +81,10 @@ namespace Project1_5_DataAccess.Repositories
         {
             _db.SaveChanges();
         }
+
+        /*public ActionResult<IList<Room>> CheckRoomAvailability(DateTime beginDate)
+        {
+            return new List<Room>();
+        }*/
     }
 }

@@ -136,5 +136,20 @@ namespace Project1_5_MVC_REST.Controllers
             // return proper 204 No Content response
             return NoContent(); // success = Ok()
         }
+
+        // GET: api/Room/2018-12-25
+        //[HttpGet("{beginDate}", Name = "CheckRoomAvailable")]
+        //public ActionResult<IList<Room>> CheckRoomAvailability(DateTime beginDate)
+        //{
+        //    try
+        //    {
+        //        List<Room> list = (List<Room>)Repository.CheckRoomAvailability(beginDate);
+        //        return list;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, ex);
+        //    }
+        //}
     }
 }
