@@ -21,19 +21,20 @@ namespace Project1_5_DataAccess.Repositories
             // code-first style, make sure the database exists by now.
             db.Database.EnsureCreated();
         }
-
+        
         public async Task<IList<Customer>> GetAllAsync()
         {
             List<Customers> list = _db.Customers
-                                        /*.Include(ev => ev.EventsCustomers)
-                                        .ThenInclude(e => e.Event)
-                                        .Include(cr => cr.Reservation)
-                                        .ThenInclude(r => r.Room)*/
-                                        .OrderBy(m => m.Id)
-                                        .ToList();
+                                       /*.Include(ev => ev.EventsCustomers)
+                                       .ThenInclude(e => e.Event)
+                                       .Include(cr => cr.Reservation)
+                                       .ThenInclude(r => r.Room)*/
+                                       .OrderBy(m => m.Id)
+                                       .ToList();
 
             return Mapper.Map<List<Customers>, List<Customer>>(list);
         }
+        
 
         public async Task<Customer> GetByIdAsync(int id)
         {
@@ -70,7 +71,7 @@ namespace Project1_5_DataAccess.Repositories
 
             return model;
         }
-
+        
         public async Task DeleteAsync(int id)
         {
             //Customers tracked = Mapper.Map<Customer, Customers>(GetById(id));

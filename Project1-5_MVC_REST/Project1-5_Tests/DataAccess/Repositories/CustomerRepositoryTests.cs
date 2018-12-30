@@ -1,4 +1,10 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Project1_5_DataAccess;
+using Project1_5_DataAccess.Repositories;
+using Project1_5_Library;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -9,9 +15,38 @@ namespace Project1_5_Tests.DataAccess.Repositories
         public CustomerRepositoryTests() : base() { }
         
         [Fact]
-        public override Task CreateWorksAsync()
+        public override async Task CreateWorksAsync()
         {
-            throw new NotImplementedException();
+            Customer customerSaved = null;
+
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_customer_test_create").Options;
+            using (var db = new Project15Context(options));
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+
+                //Create customer
+                Customer customer = new Customer { Name = "Axel", Email = "axel@yahoo.com", Address1 = "111 Arlington St." };
+                customerSaved = await repo.CreateAsync(customer);
+                await repo.SaveChangesAsync();
+            }
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+                Customer Customer = Mapper.Map<Customers, Customer>(db.Customers.First(m => m.Name == "Axel"));
+
+                Assert.NotEqual(0, Customer.Id); // should get some generated ID
+                Assert.Equal(customerSaved.Id, Customer.Id);
+                Assert.Equal("Axel", Customer.Name);
+                Assert.Equal("axel@yahoo.com", Customer.Email);
+                Assert.Equal("111 Arlington St.", Customer.Address1);
+            }
         }
 
         [Fact]

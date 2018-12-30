@@ -56,13 +56,15 @@ namespace Project1_5_Tests.DataAccess.Repositories
         {
             int id = 1000;
 
-            // arrange (use the context directl - we assume that it works)
             var options = new DbContextOptionsBuilder<Project15Context>()
                 .UseInMemoryDatabase("dp_room_test-delete").Options;
 
+            // arrange (use the context directl - we assume that it works)
             using (var db = new Project15Context(options));
 
-            using(var db = new Project15Context(options))
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
             {
                 var repo = new RoomRepository(db);
 
@@ -160,10 +162,8 @@ namespace Project1_5_Tests.DataAccess.Repositories
                     Assert.Equal(list[i].Cost, rooms[i].Cost);
                     Assert.Equal(list[i].Beds, rooms[i].Beds);
                     Assert.Equal(list[i].RoomType, rooms[i].RoomType);
-
                 }
             }
-
         }
 
         [Fact]
@@ -174,8 +174,10 @@ namespace Project1_5_Tests.DataAccess.Repositories
             var options = new DbContextOptionsBuilder<Project15Context>()
                           .UseInMemoryDatabase("db_room_test_getAll").Options;
 
+            // arrange (use the context directly - we assume that works)
             using (var db = new Project15Context(options));
 
+            // assert (for assert, once again use the context directly for verify.)
             using (var db = new Project15Context(options))
             {
                 var repo = new RoomRepository(db);
@@ -183,7 +185,6 @@ namespace Project1_5_Tests.DataAccess.Repositories
                 Room room = await repo.GetByIdAsync(id);
 
                 Assert.Null(room);
-
             }
         }
 
@@ -232,9 +233,9 @@ namespace Project1_5_Tests.DataAccess.Repositories
                           .UseInMemoryDatabase("db_room_test_getAll").Options;
 
             // arrange (use the context directly - we assume that works)
-            using (var db = new Project15Context(options)) ;          
-            
-            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options)) ;
+
+            // assert (for assert, once again use the context directly for verify.)
             using (var db = new Project15Context(options))
             {
                 var repo = new RoomRepository(db);
@@ -272,7 +273,12 @@ namespace Project1_5_Tests.DataAccess.Repositories
                 };
 
                 roomSaved = await repo.CreateAsync(room);
+
                 await repo.SaveChangesAsync();
+
+                roomSaved = await repo.CreateAsync(room);
+                await repo.SaveChangesAsync();
+
 
                 id = roomSaved.Id;
 
@@ -291,8 +297,6 @@ namespace Project1_5_Tests.DataAccess.Repositories
                 await Assert.ThrowsAsync<ArgumentException>(() => repo.UpdateAsync(room, wronId));
 
             }
-
-
 
         }
 
@@ -325,6 +329,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
                 id = roomSaved.Id;
 
             }
+
             // assert (for assert, once again use the context directly for verify.)
             using (var db = new Project15Context(options))
             {

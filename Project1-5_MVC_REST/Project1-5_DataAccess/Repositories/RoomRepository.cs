@@ -18,11 +18,10 @@ namespace Project1_5_DataAccess.Repositories
         public RoomRepository(Project15Context db)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
-
+            
             // code-first style, make sure the database exists by now.
-           db.Database.EnsureCreated();
+            db.Database.EnsureCreated();
         }
-
 
         public async Task<IList<Room>> GetAllAsync()
         {
@@ -71,7 +70,6 @@ namespace Project1_5_DataAccess.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            //Rooms tracked = Mapper.Map<Room, Rooms>(GetById(id));
             Rooms tracked = _db.Rooms.Find(id);
             if (tracked == null)
             {

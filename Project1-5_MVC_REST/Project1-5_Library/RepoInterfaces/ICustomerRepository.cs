@@ -10,12 +10,12 @@ namespace Project1_5_Library.RepoInterfaces
     {
         Task<IList<Customer>> GetAllAsync();
         Task<Customer> GetByIdAsync(int id);
-
+        
         Task<Customer> CreateAsync(Customer model);
         Task<Customer> UpdateAsync(Customer model, int? id = null);
 
         Task DeleteAsync(int id);
-
+        
         Task SaveChangesAsync();
     }
 }
