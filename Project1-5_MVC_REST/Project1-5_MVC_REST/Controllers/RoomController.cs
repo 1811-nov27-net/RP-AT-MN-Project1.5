@@ -22,11 +22,11 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/Room
         [HttpGet]
-        public ActionResult<IList<Room>> Get()
+        public async Task<ActionResult<List<Room>>> GetAsync()
         {
             try
             {
-                List<Room> list = (List<Room>)Repository.GetAll();
+                List<Room> list = (List<Room>) await Repository.GetAllAsync();
                 return list;
             }
             catch (Exception ex)
@@ -37,12 +37,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/Room/5
         [HttpGet("{id}", Name = "GetRoom")]
-        public ActionResult<Room> Get(int id)
+        public async Task<ActionResult<Room>> GetAsync(int id)
         {
             Room roomDB;
             try
             {
-                roomDB = Repository.GetById(id);
+                roomDB = await Repository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -58,12 +58,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // POST: api/Room
         [HttpPost]
-        public ActionResult Post([FromBody] Room room)
+        public async Task<ActionResult> PostAsync([FromBody] Room room)
         {
             try
             {
-                room = Repository.Create(room);
-                Repository.SaveChanges();
+                room = await Repository.CreateAsync(room);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -77,12 +77,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // PUT: api/Room/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Room room)
+        public async Task<ActionResult> PutAsync(int id, [FromBody] Room room)
         {
             Room roomDB;
             try
             {
-                roomDB = Repository.GetById(id);
+                roomDB = await Repository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -99,8 +99,8 @@ namespace Project1_5_MVC_REST.Controllers
             }
             try
             {
-                Repository.Update(room, id);
-                Repository.SaveChanges();
+                await Repository.UpdateAsync(room, id);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -113,20 +113,20 @@ namespace Project1_5_MVC_REST.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
             Room roomDB;
             try
             {
-                roomDB = Repository.GetById(id);
+                roomDB = await Repository.GetByIdAsync(id);
                 if (roomDB == null)
                 {
                     return NotFound(); // if resource doesn't exist, i'll return an error
                 }
                 roomDB = null;
 
-                Repository.Delete(id);
-                Repository.SaveChanges();
+                await Repository.DeleteAsync(id);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {

@@ -22,11 +22,11 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/Employee
         [HttpGet]
-        public ActionResult<IList<Employee>> Get()
+        public async Task<ActionResult<IList<Employee>>> GetAsync()
         {
             try
             {
-                List<Employee> list = (List<Employee>)Repository.GetAll();
+                List<Employee> list = (List<Employee>) await Repository.GetAllAsync();
                 return list;
             }
             catch (Exception ex)
@@ -37,12 +37,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/Employee/5
         [HttpGet("{id}", Name = "GetEmployee")]
-        public ActionResult<Employee> Get(int id)
+        public async Task<ActionResult<Employee>> GetAsync(int id)
         {
             Employee employeeDB;
             try
             {
-                employeeDB = Repository.GetById(id);
+                employeeDB = await Repository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -58,12 +58,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // POST: api/Employee
         [HttpPost]
-        public ActionResult Post([FromBody] Employee employee)
+        public async Task<ActionResult> PostAsync([FromBody] Employee employee)
         {
             try
             {
-                employee = Repository.Create(employee);
-                Repository.SaveChanges();
+                employee = await Repository.CreateAsync(employee);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -77,12 +77,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // PUT: api/Employee/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Employee employee)
+        public async Task<ActionResult> PutAsync(int id, [FromBody] Employee employee)
         {
             Employee employeeDB;
             try
             {
-                employeeDB = Repository.GetById(id);
+                employeeDB = await Repository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -99,8 +99,8 @@ namespace Project1_5_MVC_REST.Controllers
             }
             try
             {
-                Repository.Update(employee, id);
-                Repository.SaveChanges();
+                await Repository.UpdateAsync(employee, id);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -113,20 +113,20 @@ namespace Project1_5_MVC_REST.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
             Employee employeeDB;
             try
             {
-                employeeDB = Repository.GetById(id);
+                employeeDB = await Repository.GetByIdAsync(id);
                 if (employeeDB == null)
                 {
                     return NotFound(); // if resource doesn't exist, i'll return an error
                 }
                 employeeDB = null;
 
-                Repository.Delete(id);
-                Repository.SaveChanges();
+                await Repository.DeleteAsync(id);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
