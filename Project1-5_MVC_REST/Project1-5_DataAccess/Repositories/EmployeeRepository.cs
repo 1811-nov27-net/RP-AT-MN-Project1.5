@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Project1_5_DataAccess.Repositories
 {
@@ -20,8 +21,22 @@ namespace Project1_5_DataAccess.Repositories
             // code-first style, make sure the database exists by now.
             db.Database.EnsureCreated();
         }
+        
+        public async Task<IList<Employee>> GetAllAsync()
+        {
+            List<Employees> list = _db.Employees
+                                        .OrderBy(m => m.Id)
+                                        .ToList();
 
-        public Employee Create(Employee model)
+            return Mapper.Map<List<Employees>, List<Employee>>(list);
+        }
+
+        public async Task<Employee> GetByIdAsync(int id)
+        {
+            return Mapper.Map<Employees, Employee>(_db.Employees.Find(id));
+        }
+
+        public async Task<Employee> CreateAsync(Employee model)
         {
             Employees employee = Mapper.Map<Employee, Employees>(model);
 
@@ -31,32 +46,7 @@ namespace Project1_5_DataAccess.Repositories
             return model;
         }
 
-        public void Delete(int id)
-        {
-            //Employees tracked = Mapper.Map<Employee, Employees>(GetById(id));
-            Employees tracked = _db.Employees.Find(id);
-            if (tracked == null)
-            {
-                throw new ArgumentException("No Employee with this id", nameof(id));
-            }
-            _db.Remove(tracked);
-        }
-
-        public IEnumerable GetAll()
-        {
-            List<Employees> list = _db.Employees
-                                        .OrderBy(m => m.Id)
-                                        .ToList();
-
-            return Mapper.Map<List<Employees>, List<Employee>>(list);
-        }
-
-        public Employee GetById(int id)
-        {
-            return Mapper.Map<Employees, Employee>(_db.Employees.Find(id));
-        }
-
-        public Employee Update(Employee model, int? id = null)
+        public async Task<Employee> UpdateAsync(Employee model, int? id = null)
         {
             Employees employee = Mapper.Map<Employee, Employees>(model);
 
@@ -77,7 +67,18 @@ namespace Project1_5_DataAccess.Repositories
             return model;
         }
 
-        public void SaveChanges()
+        public async Task DeleteAsync(int id)
+        {
+            //Employees tracked = Mapper.Map<Employee, Employees>(GetById(id));
+            Employees tracked = _db.Employees.Find(id);
+            if (tracked == null)
+            {
+                throw new ArgumentException("No Employee with this id", nameof(id));
+            }
+            _db.Remove(tracked);
+        }
+
+        public async Task SaveChangesAsync()
         {
             _db.SaveChanges();
         }

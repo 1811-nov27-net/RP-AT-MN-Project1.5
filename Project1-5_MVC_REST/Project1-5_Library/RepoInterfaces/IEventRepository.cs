@@ -2,19 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Project1_5_Library.RepoInterfaces
 {
     public interface IEventRepository
     {
-        IEnumerable GetAll();
-        Event GetById(int id);
+        Task<IList<Event>> GetAllAsync();
+        Task<Event> GetByIdAsync(int id);
 
-        Event Create(Event model);
-        Event Update(Event model, int? id = null);
+        Task<Event> CreateAsync(Event model);
+        Task<Event> UpdateAsync(Event model, int? id = null);
 
-        void Delete(int id);
+        Task DeleteAsync(int id);
 
-        void SaveChanges();
+        Task SaveChangesAsync();
     }
 }

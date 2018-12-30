@@ -1,4 +1,5 @@
 ﻿using Project1_5_Library;
+using Project1_5_Library.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,9 +36,20 @@ namespace Project1_5_Tests.Library
             Room room = new Room() { Beds = 1, Cost = 50, RoomType = "Standart" };
             Reservation r = new Reservation() { CustomerId = 1, Room = room, StartDate = startDate, EndDate = endDate };
 
-            Assert.Throws<ArgumentException>(() => r.calculateCost());
+            Assert.Throws<SameDateException>(() => r.calculateCost());
         }
-        
+
+        [Fact]
+        public void calculateCostWithStartDateAfterEndDateShouldReturnException()
+        {
+            DateTime startDate = new DateTime(2018, 12, 27);
+            DateTime endDate = new DateTime(2018, 12, 26);
+            Room room = new Room() { Beds = 1, Cost = 50, RoomType = "Standart" };
+            Reservation r = new Reservation() { CustomerId = 1, Room = room, StartDate = startDate, EndDate = endDate };
+
+            Assert.Throws<EndDateBeforeStartDateException>(() => r.calculateCost());
+        }
+
         [Theory, MemberData(nameof(DifferentDates))]
         public void calculateCostWithDifferentDatesShouldReturnCost(DateTime startDate, DateTime endDate, decimal expected)
         {

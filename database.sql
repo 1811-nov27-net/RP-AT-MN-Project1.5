@@ -117,12 +117,12 @@ GO
 ALTER TABLE [Hotel].[Rooms] ADD  CONSTRAINT [DF_Rooms_Reserved]  DEFAULT ((0)) FOR [Reserved]
 GO
 ALTER TABLE [Hotel].[EventsCustomers]  WITH CHECK ADD  CONSTRAINT [FK_EventsCustomers_Customer] FOREIGN KEY([CustomerId])
-REFERENCES [Hotel].[Customers] ([Id])
+REFERENCES [Hotel].[Customers] ([Id]) on delete cascade
 GO
 ALTER TABLE [Hotel].[EventsCustomers] CHECK CONSTRAINT [FK_EventsCustomers_Customer]
 GO
 ALTER TABLE [Hotel].[EventsCustomers]  WITH CHECK ADD  CONSTRAINT [FK_EventsCustomers_Event] FOREIGN KEY([EventId])
-REFERENCES [Hotel].[Events] ([Id])
+REFERENCES [Hotel].[Events] ([Id]) on delete cascade
 GO
 ALTER TABLE [Hotel].[EventsCustomers] CHECK CONSTRAINT [FK_EventsCustomers_Event]
 GO
