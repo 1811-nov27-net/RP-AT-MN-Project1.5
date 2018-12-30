@@ -2,19 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Project1_5_Library.RepoInterfaces
 {
     public interface ICustomerRepository
     {
-        IEnumerable GetAll();
-        Customer GetById(int id);
+        Task<IList<Customer>> GetAllAsync();
+        Task<Customer> GetByIdAsync(int id);
+        
+        Task<Customer> CreateAsync(Customer model);
+        Task<Customer> UpdateAsync(Customer model, int? id = null);
 
-        Customer Create(Customer model);
-        Customer Update(Customer model, int? id = null);
-
-        void Delete(int id);
-
-        void SaveChanges();
+        Task DeleteAsync(int id);
+        
+        Task SaveChangesAsync();
     }
 }

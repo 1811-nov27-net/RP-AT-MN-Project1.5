@@ -22,11 +22,11 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/Customer
         [HttpGet]
-        public ActionResult<IList<Customer>> Get()
+        public async Task<ActionResult<IList<Customer>>> GetAsync()
         {
             try
             {
-                List<Customer> list = (List<Customer>)Repository.GetAll();
+                List<Customer> list = (List<Customer>) await Repository.GetAllAsync();
                 return list;
             }
             catch (Exception ex)
@@ -37,12 +37,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/Customer/5
         [HttpGet("{id}", Name = "GetCustomer")]
-        public ActionResult<Customer> Get(int id)
+        public async Task<ActionResult<Customer>> GetAsync(int id)
         {
             Customer customerDB;
             try
             {
-                customerDB = Repository.GetById(id);
+                customerDB = await Repository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -58,12 +58,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // POST: api/Customer
         [HttpPost]
-        public ActionResult Post([FromBody] Customer customer)
+        public async Task<ActionResult> PostAsync([FromBody] Customer customer)
         {
             try
             {
-                customer = Repository.Create(customer);
-                Repository.SaveChanges();
+                customer = await Repository.CreateAsync(customer);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -77,12 +77,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // PUT: api/Customer/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Customer customer)
+        public async Task<ActionResult> PutAsync(int id, [FromBody] Customer customer)
         {
             Customer customerDB;
             try
             {
-                customerDB = Repository.GetById(id);
+                customerDB = await Repository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -99,8 +99,8 @@ namespace Project1_5_MVC_REST.Controllers
             }
             try
             {
-                Repository.Update(customer, id);
-                Repository.SaveChanges();
+                await Repository.UpdateAsync(customer, id);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -113,20 +113,20 @@ namespace Project1_5_MVC_REST.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
             Customer customerDB;
             try
             {
-                customerDB = Repository.GetById(id);
+                customerDB = await Repository.GetByIdAsync(id);
                 if (customerDB == null)
                 {
                     return NotFound(); // if resource doesn't exist, i'll return an error
                 }
                 customerDB = null;
 
-                Repository.Delete(id);
-                Repository.SaveChanges();
+                await Repository.DeleteAsync(id);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {

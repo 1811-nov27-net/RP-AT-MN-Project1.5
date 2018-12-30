@@ -22,11 +22,11 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/EventCustomer
         [HttpGet]
-        public ActionResult<IList<EventCustomer>> Get()
+        public async Task<ActionResult<IList<EventCustomer>>> GetAsync()
         {
             try
             {
-                List<EventCustomer> list = (List<EventCustomer>)Repository.GetAll();
+                List<EventCustomer> list = (List<EventCustomer>) await Repository.GetAllAsync();
                 return list;
             }
             catch (Exception ex)
@@ -37,12 +37,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/EventCustomer/5
         [HttpGet("{id}", Name = "GetEventCustomer")]
-        public ActionResult<EventCustomer> Get(int id)
+        public async Task<ActionResult<EventCustomer>> GetAsync(int id)
         {
             EventCustomer customerDB;
             try
             {
-                customerDB = Repository.GetById(id);
+                customerDB = await Repository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -58,12 +58,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // POST: api/EventCustomer
         [HttpPost]
-        public ActionResult Post([FromBody] EventCustomer customer)
+        public async Task<ActionResult> PostAsync([FromBody] EventCustomer customer)
         {
             try
             {
-                customer = Repository.Create(customer);
-                Repository.SaveChanges();
+                customer = await Repository.CreateAsync(customer);
+                Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -77,12 +77,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // PUT: api/EventCustomer/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] EventCustomer customer)
+        public async Task<ActionResult> PutAsync(int id, [FromBody] EventCustomer customer)
         {
             EventCustomer customerDB;
             try
             {
-                customerDB = Repository.GetById(id);
+                customerDB = await Repository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -99,8 +99,8 @@ namespace Project1_5_MVC_REST.Controllers
             }
             try
             {
-                Repository.Update(customer, id);
-                Repository.SaveChanges();
+                Repository.UpdateAsync(customer, id);
+                Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -113,20 +113,20 @@ namespace Project1_5_MVC_REST.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
             EventCustomer customerDB;
             try
             {
-                customerDB = Repository.GetById(id);
+                customerDB = await Repository.GetByIdAsync(id);
                 if (customerDB == null)
                 {
                     return NotFound(); // if resource doesn't exist, i'll return an error
                 }
                 customerDB = null;
 
-                Repository.Delete(id);
-                Repository.SaveChanges();
+                await Repository.DeleteAsync(id);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {

@@ -28,6 +28,7 @@
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -49,9 +50,14 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.ActionLink("Edit", "EditAsync", new { id = item.Id }) 
-                @Html.ActionLink("Details", "DetailsAsync", new { id=item.Id }) 
+                @Html.ActionLink("Edit", "EditAsync", new { id = item.Id })
+                @Html.ActionLink("Details", "DetailsAsync", new { id = item.Id })
                 @Html.ActionLink("Delete", "DeleteAsync", new { id = item.Id })
+            </td>
+            <td>
+                <a href='CustomerEvent/Add/@item.Id'>
+                    Add Customer
+                </a>
             </td>
         </tr>
 }

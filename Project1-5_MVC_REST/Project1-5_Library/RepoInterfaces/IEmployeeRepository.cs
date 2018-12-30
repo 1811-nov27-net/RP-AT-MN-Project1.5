@@ -2,19 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Project1_5_Library.RepoInterfaces
 {
     public interface IEmployeeRepository
     {
-        IEnumerable GetAll();
-        Employee GetById(int id);
+        Task<IList<Employee>> GetAllAsync();
+        Task<Employee> GetByIdAsync(int id);
 
-        Employee Create(Employee model);
-        Employee Update(Employee model, int? id = null);
+        Task<Employee> CreateAsync(Employee model);
+        Task<Employee> UpdateAsync(Employee model, int? id = null);
 
-        void Delete(int id);
+        Task DeleteAsync(int id);
 
-        void SaveChanges();
+        Task SaveChangesAsync();
     }
 }
