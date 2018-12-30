@@ -5,6 +5,7 @@ using Project1_5_DataAccess.Repositories;
 using Project1_5_Library;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Xunit;
 
@@ -167,13 +168,57 @@ namespace Project1_5_Tests.DataAccess.Repositories
         [Fact]
         public override void GetByIdThatDoesntExistReturnsNull()
         {
-            throw new NotImplementedException();
+            int id = 1000;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                          .UseInMemoryDatabase("db_room_test_getAll").Options;
+
+            using (var db = new Project15Context(options));
+
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = repo.GetById(id);
+
+                Assert.Null(room);
+            }
         }
 
         [Fact]
         public override void GetByIdWorks()
         {
-            throw new NotImplementedException();
+            int id = 0;
+
+            Room roomSaved = null;
+
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_room_test_create").Options;
+            using (var db = new Project15Context(options)) ;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                //Create customer
+                Room room = new Room { Beds = 1, Cost = 50, RoomType = "Standard" };
+                roomSaved = repo.Create(room);
+                repo.SaveChanges();
+                id = roomSaved.Id;
+            }
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+                Room room = repo.GetById(id);
+
+                Assert.NotEqual(0, room.Id);
+                Assert.Equal(1, room.Beds);
+                Assert.Equal("Standard", room.RoomType);
+            }
         }
 
         [Fact]
