@@ -55,9 +55,9 @@
                 @Html.DisplayFor(modelItem => item.TotalCost)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Edit", "EditAsync", new { id = item.Id }) |
+                @Html.ActionLink("Details", "DetailsAsync", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteAsync", new { id = item.Id })
             </td>
         </tr>
 }

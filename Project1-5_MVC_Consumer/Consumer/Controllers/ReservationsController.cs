@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Project1_5_Library;
-using Consumer.Controllers;
+
 
 namespace Consumer.Controllers
 {
@@ -20,7 +20,7 @@ namespace Consumer.Controllers
 		public async Task<ActionResult> Index()
 		{
 			// send "GET api/Temperature" to service, get headers of response
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/Reservations");
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/Reservation");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -40,7 +40,7 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			List<Event> Reservations = JsonConvert.DeserializeObject<List<Event>>(responseBody);
+			List<Reservation> Reservations = JsonConvert.DeserializeObject<List<Reservation>>(responseBody);
 
 			return View(Reservations);
 		}
@@ -49,7 +49,7 @@ namespace Consumer.Controllers
 		public async Task<ActionResult> DetailsAsync(int id)
 		// send "GET api/Temperature" to service, get headers of response
 		{
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Event/{id}");
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Reservation/{id}");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -69,7 +69,7 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			Event Reservations = JsonConvert.DeserializeObject<Event>(responseBody);
+			Reservation Reservations = JsonConvert.DeserializeObject<Reservation>(responseBody);
 
 			return View(Reservations);
 
@@ -96,13 +96,13 @@ namespace Consumer.Controllers
 		// POST: Reservations/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> CreateAsync(Event record)
+		public async Task<ActionResult> CreateAsync(Reservation record)
 		{
 			try
 			{
 
 				// use POST method, not GET, based on the route the service has defined
-				HttpRequestMessage request = CreateRequestToService(HttpMethod.Post, "api/Event", record);
+				HttpRequestMessage request = CreateRequestToService(HttpMethod.Post, "api/Reservation", record);
 				HttpResponseMessage response = await Client.SendAsync(request);
 
 				if (!response.IsSuccessStatusCode)
@@ -124,7 +124,7 @@ namespace Consumer.Controllers
 		// GET: Reservations/Edit/5
 		public async Task<ActionResult> EditAsync(int id)
 		{
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Event/{id}");
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Reservation/{id}");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -144,20 +144,20 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			Event Event = JsonConvert.DeserializeObject<Event>(responseBody);
+			Reservation Reservations = JsonConvert.DeserializeObject<Reservation>(responseBody);
 
-			return View(Event);
+			return View(Reservations);
 		}
 
 		// POST: Reservations/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditAsync(int id, Event record)
+		public async Task<ActionResult> EditAsync(int id, Reservation record)
 		{
 			try
 			{
 
-				var url = $"https://localhost:44336/api/Event/{id}";
+				var url = $"https://localhost:44336/api/Reservation/{id}";
 				var response = await Client.PutAsJsonAsync(url, record);
 
 				if (response.IsSuccessStatusCode)
@@ -174,7 +174,7 @@ namespace Consumer.Controllers
 		// GET: Reservations/Delete/5
 		public async Task<ActionResult> DeleteAsync(int id)
 		{
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Event/{id}");
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Reservation/{id}");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -194,9 +194,9 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			Event Event = JsonConvert.DeserializeObject<Event>(responseBody);
+			Reservation Reservations = JsonConvert.DeserializeObject<Reservation>(responseBody);
 
-			return View(Event);
+			return View(Reservations);
 		}
 
 		// POST: Reservations/Delete/5
@@ -206,7 +206,7 @@ namespace Consumer.Controllers
 		{
 			try
 			{
-				var response = await Client.DeleteAsync($"https://localhost:44336/api/Event/{id}");
+				var response = await Client.DeleteAsync($"https://localhost:44336/api/Reservation/{id}");
 
 				if (response.IsSuccessStatusCode)
 				{
