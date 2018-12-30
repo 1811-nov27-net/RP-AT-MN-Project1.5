@@ -230,8 +230,10 @@ namespace Project1_5_Tests.DataAccess.Repositories
             var options = new DbContextOptionsBuilder<Project15Context>()
                           .UseInMemoryDatabase("db_room_test_getAll").Options;
 
-            using (var db = new Project15Context(options)) ;
-
+            // arrange (use the context directly - we assume that works)
+            using (var db = new Project15Context(options)) ;          
+            
+            // act (for act, only use the repo, to test it)
             using (var db = new Project15Context(options))
             {
                 var repo = new RoomRepository(db);
@@ -245,15 +247,109 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override void UpdateWithWorngIdShouldReturnException()
+        public override void UpdateWithWrongIdShouldReturnException()
         {
-            throw new NotImplementedException();
+            int id = 0;
+            int wronId = 10;
+            Room roomSaved = null;
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_rooms_test_update").Options;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options));
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = new Room
+                {
+                    Cost = 500,
+                    RoomType = "Standard"
+                };
+
+                roomSaved = repo.Create(room);
+                repo.SaveChanges();
+
+                id = roomSaved.Id;
+
+            }
+
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = repo.GetById(id);
+
+                Assert.NotEqual(0, room.Id);
+                Assert.Equal(500, room.Cost);
+                Assert.Equal("Standard", room.RoomType);
+
+                Assert.Throws<ArgumentException>(() => repo.Update(room, wronId));
+
+            }
+
+
+
         }
 
         [Fact]
         public override void UpdateWorks()
         {
-            throw new NotImplementedException();
+            int id = 0;
+            Room roomSaved = null;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+              .UseInMemoryDatabase("db_rooms_test_update").Options;
+
+            // arrange (use the context directly - we assume that works)
+            using (var db = new Project15Context(options)) ;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+
+                Room room = new Room
+                {
+                    Cost = 500,
+                    RoomType = "Standard"
+                };
+
+                roomSaved = repo.Create(room);
+                repo.SaveChanges();
+
+                id = roomSaved.Id;
+
+            }
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new RoomRepository(db);
+                Room room = repo.GetById(id);
+
+                Assert.NotEqual(0, room.Id);
+                Assert.Equal(500, room.Cost);
+                Assert.Equal("Standard", room.RoomType);
+
+                room.Cost = 400;
+                room.RoomType = "Suite";
+
+                repo.Update(room, id);
+                repo.SaveChanges();
+
+                room = repo.GetById(room.Id);
+
+                Assert.NotEqual(0, room.Id);
+                Assert.Equal(400, room.Cost);
+                Assert.Equal("Suite", room.RoomType);
+
+
+
+            }
+
         }
     }
 }

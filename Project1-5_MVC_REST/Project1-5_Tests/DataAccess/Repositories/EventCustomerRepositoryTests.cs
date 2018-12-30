@@ -49,8 +49,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
             throw new NotImplementedException();
         }
 
-        [Fact]
-        public override void UpdateWithWorngIdShouldReturnException()
+        public override void UpdateWithWrongIdShouldReturnException()
         {
             throw new NotImplementedException();
         }

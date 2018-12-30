@@ -42,7 +42,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
 
         public abstract void CreateWorks();
         public abstract void UpdateWorks();
-        public abstract void UpdateWithWorngIdShouldReturnException();
+        public abstract void UpdateWithWrongIdShouldReturnException();
         public abstract void UpdateWithNoIdShouldReturnException();
         public abstract void GetAllWorks();
         public abstract void GetByIdWorks();
