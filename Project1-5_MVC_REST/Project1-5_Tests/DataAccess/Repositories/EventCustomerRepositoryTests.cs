@@ -220,9 +220,27 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override Task UpdateWithNoIdShouldReturnExceptionAsync()
+        public override async Task UpdateWithNoIdShouldReturnExceptionAsync()
         {
-            throw new NotImplementedException();
+            int id = 1000;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                          .UseInMemoryDatabase("db_Event_test_getAll").Options;
+
+            // arrange (use the context directly - we assume that works)
+            using (var db = new Project15Context(options)) ;
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new EventRepository(db);
+
+                Event Event = await repo.GetByIdAsync(id);
+
+                Assert.Null(Event);
+
+                await Assert.ThrowsAsync<ArgumentException>(() => repo.UpdateAsync(Event, id));
+            }
         }
 
         [Fact]
