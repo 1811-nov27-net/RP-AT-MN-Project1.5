@@ -25,18 +25,30 @@ namespace Project1_5_DataAccess.Repositories
         public async Task<IList<Reservation>> GetAllAsync()
         {
             List<Reservations> list = _db.Reservation
-                                        /*.Include(c => c.Customer)
-                                        .Include(r => r.Room)*/
+                                        .Include(c => c.Customer)
+                                        .Include(r => r.Room)
                                         .OrderBy(m => m.Id)
                                         .ToList();
+
+            foreach(var item in list)
+            {
+                item.Customer.Reservation = null;
+                item.Room.Reservation = null;
+            }
 
             return Mapper.Map<List<Reservations>, List<Reservation>>(list);
         }
 
         public async Task<Reservation> GetByIdAsync(int id)
         {
-            Reservations reservation = _db.Reservation.Include(r => r.Customer).Where(r => r.Id == id).FirstOrDefault();
+            Reservations reservation = _db.Reservation
+                                            .Include(r => r.Customer)
+                                            .Include(r => r.Room)
+                                            .Where(r => r.Id == id)
+                                            .FirstOrDefault();
+
             reservation.Customer.Reservation = null;
+            reservation.Room.Reservation = null;
 
             return Mapper.Map<Reservations, Reservation>(reservation);
         }
