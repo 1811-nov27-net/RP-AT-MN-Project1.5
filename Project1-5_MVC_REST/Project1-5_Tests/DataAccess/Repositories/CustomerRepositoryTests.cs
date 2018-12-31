@@ -4,6 +4,7 @@ using Project1_5_DataAccess;
 using Project1_5_DataAccess.Repositories;
 using Project1_5_Library;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -50,27 +51,142 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override Task DeleteWithIdThatDoesntExistThrowsExceptionAsync()
+        public override async Task DeleteWithIdThatDoesntExistThrowsExceptionAsync()
         {
-            throw new NotImplementedException();
+            int id = 1000;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_customer_test_delete").Options;
+
+            // arrange (use the context directl - we assume that it works)
+            using (var db = new Project15Context(options));
+
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+
+                Customer customer = await repo.GetByIdAsync(id);
+
+                Assert.Null(customer);
+
+                await Assert.ThrowsAsync<ArgumentException>(() => repo.DeleteAsync(id));
+            }
         }
 
         [Fact]
-        public override Task DeleteWorksAsync()
+        public override async Task DeleteWorksAsync()
         {
-            throw new NotImplementedException();
+            Customer customerSaved = null;
+            int id = 0;
+
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_customer_test_delete").Options;
+            using (var db = new Project15Context(options)) ;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+
+                //Create customer
+                Customer customer = new Customer { Name = "Axel", Email = "axel@yahoo.com", Address1 = "111 Arlington St." };
+                customerSaved = await repo.CreateAsync(customer);
+                await repo.SaveChangesAsync();
+
+                id = customerSaved.Id;
+            }
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+                Customer customer = await repo.GetByIdAsync(id);
+
+                Assert.NotEqual(0, customer.Id); // should get some generated ID
+                Assert.Equal(customerSaved.Id, customer.Id);
+                Assert.Equal("Axel", customer.Name);
+                Assert.Equal("axel@yahoo.com", customer.Email);
+                Assert.Equal("111 Arlington St.", customer.Address1);
+
+                await repo.DeleteAsync(id);
+                await repo.SaveChangesAsync();
+                customer = await repo.GetByIdAsync(id);
+
+                Assert.Null(customer);
+            }
         }
 
         [Fact]
-        public override Task GetAllWorksAsync()
+        public override async Task GetAllWorksAsync()
         {
-            throw new NotImplementedException();
+            List<Customer> customers = new List<Customer>();
+            Customer customerSaved = null;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_customer_test_getAll").Options;
+
+            using (var db = new Project15Context(options));
+
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+
+                for (int i = 0; i < 5; i++)
+                {
+                    Customer customer = new Customer
+                    {
+                        Name = $"First Name {i}",
+                        Email = $"Email {i}",
+                        City = $"City {i}"
+                    };
+                    customerSaved = await repo.CreateAsync(customer);
+                    await repo.SaveChangesAsync();
+                    customers.Add(customerSaved);
+                }
+            }
+            using (var db = new Project15Context(options))
+            {
+
+                var repo = new CustomerRepository(db);
+                List<Customer> customerList = (List<Customer>)await repo.GetAllAsync();
+
+                // should equal the same amount of rooms
+                Assert.Equal(customers.Count, customerList.Count);
+
+                for (int i = 0; i < customers.Count; i++)
+                {
+                    Assert.Equal(customers[i].Name, customerList[i].Name);
+                    Assert.Equal(customers[i].Email, customerList[i].Email);
+                    Assert.Equal(customers[i].City, customerList[i].City);
+                    Assert.NotEqual(0, customers[i].Id);
+                }
+
+            }
         }
 
         [Fact]
-        public override Task GetByIdThatDoesntExistReturnsNullAsync()
+        public override async Task GetByIdThatDoesntExistReturnsNullAsync()
         {
-            throw new NotImplementedException();
+            int id = 1000;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                          .UseInMemoryDatabase("db_customer_test_getAll").Options;
+
+            // arrange (use the context directly - we assume that works)
+            using (var db = new Project15Context(options)) ;
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+
+                Customer customer= await repo.GetByIdAsync(id);
+
+                Assert.Null(customer);
+            }
         }
 
         [Fact]
