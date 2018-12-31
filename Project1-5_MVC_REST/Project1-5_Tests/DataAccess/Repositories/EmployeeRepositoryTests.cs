@@ -300,7 +300,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
         public override async Task UpdateWorksAsync()
         {
             int id = 0;
-            int wronId = 10;
+            int wrongId = 10;
             Employee EmployeeSaved = null;
             // arrange (use the context directly - we assume that works)
             var options = new DbContextOptionsBuilder<Project15Context>()
@@ -347,7 +347,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
 
                 employee = await repo.GetByIdAsync(employee.Id);
 
-                Assert.NotEqual(0, employee.Id);
+                Assert.NotEqual(wrongId, employee.Id);
                 Assert.Equal("Bob", employee.Name);
                 Assert.Equal(50000, employee.Salary);
             }
