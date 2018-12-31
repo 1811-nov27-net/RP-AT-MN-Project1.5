@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Consumer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -91,7 +92,28 @@ namespace Consumer.Controllers
 			//	}
 
 			// provide default value to Create form
-			return View();
+
+
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Customer");
+			HttpResponseMessage response = await Client.SendAsync(request);
+
+			var responseBody = await response.Content.ReadAsStringAsync();
+
+			List<Customer> list = JsonConvert.DeserializeObject<List<Customer>>(responseBody);
+
+			 request = CreateRequestToService(HttpMethod.Get, $"api/Event");
+			 response = await Client.SendAsync(request);
+
+			 responseBody = await response.Content.ReadAsStringAsync();
+
+			List<Event> elist = JsonConvert.DeserializeObject<List<Event>>(responseBody);
+
+			EventCustomerView model = new EventCustomerView();
+			model.CustomersList = list;
+
+			model.EventsList = elist;
+
+			return View(model);
 		}
 		// POST: Reservations/Create
 		[HttpPost]
