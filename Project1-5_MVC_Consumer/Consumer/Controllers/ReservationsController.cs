@@ -155,9 +155,39 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			Reservation Reservations = JsonConvert.DeserializeObject<Reservation>(responseBody);
+			Reservation Reservation = JsonConvert.DeserializeObject<Reservation>(responseBody);
 
-			return View(Reservations);
+            //Set Values to View
+            ReservationView model = new ReservationView();
+            model.Id = Reservation.Id;
+            model.CustomerId = Reservation.CustomerId;
+            model.StartDate = Reservation.StartDate;
+            model.EndDate = Reservation.EndDate;
+            model.TotalCost = Reservation.TotalCost;
+            
+            //Get Customers list
+            request = CreateRequestToService(HttpMethod.Get, $"api/Customer");
+            response = await Client.SendAsync(request);
+            responseBody = await response.Content.ReadAsStringAsync();
+            List<Customer> customersList = JsonConvert.DeserializeObject<List<Customer>>(responseBody);
+            model.CustomerList = customersList;
+
+            //Get Customer
+            request = CreateRequestToService(HttpMethod.Get, $"api/Customer/{Reservation.CustomerId}");
+            response = await Client.SendAsync(request);
+            responseBody = await response.Content.ReadAsStringAsync();
+            Customer customer = JsonConvert.DeserializeObject<Customer>(responseBody);
+            model.Customer = customer;
+
+            //Get Room
+            request = CreateRequestToService(HttpMethod.Get, $"api/Room/{Reservation.RoomId}");
+            response = await Client.SendAsync(request);
+            responseBody = await response.Content.ReadAsStringAsync();
+            Room room = JsonConvert.DeserializeObject<Room>(responseBody);
+            model.Room = room;
+            model.roomSelectString = $"<option value='{room.Id}'>{room.Id} {String.Format("{0:0.00}", room.Cost)} ({room.RoomType})</option>";
+
+            return View(model);
 		}
 
 		// POST: Reservations/Edit/5

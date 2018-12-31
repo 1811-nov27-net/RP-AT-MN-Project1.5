@@ -30,5 +30,7 @@ namespace Consumer.Models
         public virtual Room Room { get; set; }
 
         public List<Customer> CustomerList;
+
+        public String roomSelectString;
     }
 }
