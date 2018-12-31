@@ -244,9 +244,44 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override Task UpdateWithWrongIdShouldReturnExceptionAsync()
+        public override async Task UpdateWithWrongIdShouldReturnExceptionAsync()
         {
-            throw new NotImplementedException();
+            int id = 0;
+            int wronId = 10;
+            Event EventSaved = null;
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_Event_test_update").Options;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options)) ;
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new EventRepository(db);
+
+                Event Event = new Event { Name = "Jazz Fest", Type = "Music", Cost = 40 };
+                EventSaved = await repo.CreateAsync(Event);
+                await repo.SaveChangesAsync();
+                id = EventSaved.Id;
+            }
+
+            using (var db = new Project15Context(options))
+            {
+                var repo = new EventRepository(db);
+
+                Event Event = await repo.GetByIdAsync(id);
+
+                Assert.NotEqual(0, Event.Id); // should get some generated ID
+                Assert.Equal(EventSaved.Id, Event.Id);
+                Assert.Equal("Jazz Fest", Event.Name);
+                Assert.Equal("Music", Event.Type);
+                Assert.Equal(40, Event.Cost);
+
+                await Assert.ThrowsAsync<ArgumentException>(() => repo.UpdateAsync(Event, wronId));
+
+            }
         }
 
         [Fact]
