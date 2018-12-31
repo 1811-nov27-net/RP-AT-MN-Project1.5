@@ -25,11 +25,11 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/Reservation
         [HttpGet]
-        public ActionResult<IList<Reservation>> Get()
+        public async Task<ActionResult<IList<Reservation>>> GetAsync()
         {
             try
             {
-                List<Reservation> list = (List<Reservation>)Repository.GetAll();
+                List<Reservation> list = (List<Reservation>)await Repository.GetAllAsync();
                 return list;
             }
             catch (Exception ex)
@@ -40,12 +40,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // GET: api/Reservation/5
         [HttpGet("{id}", Name = "GetReservation")]
-        public ActionResult<Reservation> Get(int id)
+        public async Task<ActionResult<Reservation>> GetAsync(int id)
         {
             Reservation reservationDB;
             try
             {
-                reservationDB = Repository.GetById(id);
+                reservationDB = await Repository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -61,16 +61,16 @@ namespace Project1_5_MVC_REST.Controllers
 
         // POST: api/Reservation
         [HttpPost]
-        public ActionResult Post([FromBody] Reservation reservation)
+        public async Task<ActionResult> PostAsync([FromBody] Reservation reservation)
         {
             try
             {
                 //Need this to calculate Cost, based on Room
-                reservation.Room = RoomRepository.GetById(reservation.RoomId);
+                reservation.Room = await RoomRepository.GetByIdAsync(reservation.RoomId);
 
                 reservation.calculateCost();
-                reservation = Repository.Create(reservation);
-                Repository.SaveChanges();
+                reservation = await Repository.CreateAsync(reservation);
+                await Repository.SaveChangesAsync();
             }
             catch (SameDateException ex)
             {
@@ -92,12 +92,12 @@ namespace Project1_5_MVC_REST.Controllers
 
         // PUT: api/Reservation/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Reservation reservation)
+        public async Task<ActionResult> PutAsync(int id, [FromBody] Reservation reservation)
         {
             Reservation reservationDB;
             try
             {
-                reservationDB = Repository.GetById(id);
+                reservationDB = await Repository.GetByIdAsync(id);
             }
             catch (Exception ex)
             {
@@ -115,11 +115,11 @@ namespace Project1_5_MVC_REST.Controllers
             try
             {
                 //Need this to calculate Cost, based on Room
-                reservation.Room = RoomRepository.GetById(reservation.RoomId);
+                reservation.Room = await RoomRepository.GetByIdAsync(reservation.RoomId);
 
                 reservation.calculateCost();
-                Repository.Update(reservation, id);
-                Repository.SaveChanges();
+                await Repository.UpdateAsync(reservation, id);
+                await Repository.SaveChangesAsync();
             }
             catch (SameDateException ex)
             {
@@ -140,20 +140,20 @@ namespace Project1_5_MVC_REST.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
             Reservation reservationDB;
             try
             {
-                reservationDB = Repository.GetById(id);
+                reservationDB = await Repository.GetByIdAsync(id);
                 if (reservationDB == null)
                 {
                     return NotFound(); // if resource doesn't exist, i'll return an error
                 }
                 reservationDB = null;
 
-                Repository.Delete(id);
-                Repository.SaveChanges();
+                await Repository.DeleteAsync(id);
+                await Repository.SaveChangesAsync();
             }
             catch (Exception ex)
             {

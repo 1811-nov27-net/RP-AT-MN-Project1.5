@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Project1_5_Tests.MVC_Rest.Controllers
 {
-    class CheckoutControllerTest
+    public class CheckoutControllerTest
     {
         [Fact]
         public void GetShouldReturnRoomValueWhenCustomerDoesntHaveAnyEvent()
