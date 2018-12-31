@@ -1,0 +1,87 @@
+﻿@model Consumer.Models.CheckoutView
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div>
+    <h4>Reservation</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Reservation.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Reservation.Id)
+        </dd>
+        <dt class="col-sm-2">
+            Customer
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Reservation.Customer.Name)<br />
+            @Html.DisplayFor(model => model.Reservation.Customer.BirthDate)<br />
+            <a href="mailto:@Html.DisplayFor(model => model.Reservation.Customer.Email)">@Html.DisplayFor(model => model.Reservation.Customer.Email)</a><br />
+            @Html.DisplayFor(model => model.Reservation.Customer.Address1).
+            @Html.DisplayFor(model => model.Reservation.Customer.Address2).
+            @Html.DisplayFor(model => model.Reservation.Customer.City) - @Html.DisplayFor(model => model.Reservation.Customer.State).
+            @Html.DisplayFor(model => model.Reservation.Customer.Zipcode)
+        </dd>
+        <dt class="col-sm-2">
+            Room
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Reservation.Room.Id)<br />
+            @Html.DisplayFor(model => model.Reservation.Room.RoomType)<br />
+            @Html.DisplayFor(model => model.Reservation.Room.Beds) Beds<br />
+            $ @Html.DisplayFor(model => model.Reservation.Room.Cost) (per day)
+        </dd>
+        <dt class="col-sm-2">
+            Events
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var item in Model.EventsCustomer)
+            {
+                @Html.DisplayFor(model => item.Event.Name)
+                @Html.DisplayFor(model => item.Event.Cost)<br />
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Reservation.StartDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Reservation.StartDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Reservation.EndDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Reservation.EndDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Reservation.Paid)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Reservation.Paid)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalCost)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TotalCost)
+        </dd>
+    </dl>
+
+</div>
+<div>
+    <form asp-action="CheckoutAsync">
+        <input type="hidden" name="Id" value="@Model.Reservation.Id" />
+        <input type="hidden" name="CustomerId" value="@Model.Reservation.CustomerId" />
+        <input type="hidden" name="RoomId" value="@Model.Reservation.RoomId" />
+        <input type="hidden" name="StartDate" value="@Model.Reservation.StartDate" />
+        <input type="hidden" name="EndDate" value="@Model.Reservation.EndDate" />
+        <input type="hidden" name="TotalCost" value="@Model.Reservation.TotalCost" />
+
+        <input type="submit" value="Checkout" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

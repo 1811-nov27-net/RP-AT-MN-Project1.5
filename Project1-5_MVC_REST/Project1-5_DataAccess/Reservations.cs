@@ -18,6 +18,7 @@ namespace Project1_5_DataAccess
         public DateTime EndDate { get; set; }
         [Column(TypeName = "money")]
         public decimal TotalCost { get; set; }
+        public bool Paid { get; set; }
 
         [ForeignKey("CustomerId")]
         [InverseProperty("Reservation")]

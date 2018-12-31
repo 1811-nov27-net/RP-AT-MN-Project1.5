@@ -31,6 +31,7 @@
                 @Html.DisplayNameFor(model => model.TotalCost)
             </th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -58,6 +59,11 @@
                 @Html.ActionLink("Edit", "EditAsync", new { id = item.Id }) |
                 @Html.ActionLink("Details", "DetailsAsync", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "DeleteAsync", new { id = item.Id })
+            </td>
+            <td>
+                <a asp-area="" asp-controller="Checkout" asp-action="DetailsAsync" asp-route-id="@item.Id">
+                    Checkout
+                </a>
             </td>
         </tr>
 }

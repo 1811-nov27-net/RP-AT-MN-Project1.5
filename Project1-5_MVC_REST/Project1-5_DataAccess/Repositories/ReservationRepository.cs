@@ -27,6 +27,7 @@ namespace Project1_5_DataAccess.Repositories
             List<Reservations> list = _db.Reservation
                                         .Include(c => c.Customer)
                                         .Include(r => r.Room)
+                                        .Where(r => r.Paid == false)
                                         .OrderBy(m => m.Id)
                                         .ToList();
 
