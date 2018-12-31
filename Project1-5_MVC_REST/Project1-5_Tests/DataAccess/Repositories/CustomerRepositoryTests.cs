@@ -190,9 +190,44 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override Task GetByIdWorksAsync()
+        public override async Task GetByIdWorksAsync()
         {
-            throw new NotImplementedException();
+            int id = 0;
+
+            Customer customerSaved = null;
+
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_room_test_getbyid").Options;
+            using (var db = new Project15Context(options)) ;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+                    Customer customer = new Customer
+                    {
+                        Name = "Axel",
+                        Email = "axel@me.com",
+                        City = "Lufkin"
+                    };
+                    customerSaved = await repo.CreateAsync(customer);
+                    await repo.SaveChangesAsync();
+                    id = customerSaved.Id;
+                
+            }
+
+                // assert (for assert, once again use the context directly for verify.)
+                using (var db = new Project15Context(options))
+                {
+                    var repo = new CustomerRepository(db);
+                    Customer customer = await repo.GetByIdAsync(id);
+
+                    Assert.NotEqual(0, customer.Id);
+                    Assert.Equal("Axel", customer.Name);
+                    Assert.Equal("axel@me.com", customer.Email);
+                    Assert.Equal("Lufkin", customer.City);
+            }
         }
 
         [Fact]
