@@ -231,21 +231,129 @@ namespace Project1_5_Tests.DataAccess.Repositories
         }
 
         [Fact]
-        public override Task UpdateWithNoIdShouldReturnExceptionAsync()
+        public override async Task UpdateWithNoIdShouldReturnExceptionAsync()
         {
-            throw new NotImplementedException();
+            int id = 1000;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                          .UseInMemoryDatabase("db_customer_test_getAll").Options;
+
+            // arrange (use the context directly - we assume that works)
+            using (var db = new Project15Context(options));
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+
+                Customer customer= await repo.GetByIdAsync(id);
+
+                Assert.Null(customer);
+
+                await Assert.ThrowsAsync<ArgumentException>(() => repo.UpdateAsync(customer, id));
+            }
         }
 
         [Fact]
-        public override Task UpdateWithWrongIdShouldReturnExceptionAsync()
+        public override async Task UpdateWithWrongIdShouldReturnExceptionAsync()
         {
-            throw new NotImplementedException();
+            int id = 0;
+            int wronId = 10;
+            Customer customerSaved = null;
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_rooms_test_update").Options;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options)) ;
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+
+                Customer customer = new Customer
+                {
+                    Name = "Axel",
+                    Email = "axel@me.com",
+                    City = "Lufkin"
+                };
+                customerSaved = await repo.CreateAsync(customer);
+                await repo.SaveChangesAsync();
+                id = customerSaved.Id;
+            }
+
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+
+                Customer customer = await repo.GetByIdAsync(id);
+
+                Assert.NotEqual(0, customer.Id);
+                Assert.Equal("Axel", customer.Name);
+                Assert.Equal("axel@me.com", customer.Email);
+                Assert.Equal("Lufkin", customer.City);
+
+                await Assert.ThrowsAsync<ArgumentException>(() => repo.UpdateAsync(customer, wronId));
+
+            }
         }
 
         [Fact]
-        public override Task UpdateWorksAsync()
+        public override async Task UpdateWorksAsync()
         {
-            throw new NotImplementedException();
+
+            int id = 0;
+            int wronId = 10;
+            Customer customerSaved = null;
+            // arrange (use the context directly - we assume that works)
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_rooms_test_update").Options;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options)) ;
+
+            // act (for act, only use the repo, to test it)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+
+                Customer customer = new Customer
+                {
+                    Name = "Axel",
+                    Email = "axel@me.com",
+                    City = "Lufkin"
+                };
+                customerSaved = await repo.CreateAsync(customer);
+                await repo.SaveChangesAsync();
+                id = customerSaved.Id;
+
+            }
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new CustomerRepository(db);
+
+                Customer customer = await repo.GetByIdAsync(id);
+
+                Assert.NotEqual(0, customer.Id);
+                Assert.Equal("Axel", customer.Name);
+                Assert.Equal("axel@me.com", customer.Email);
+                Assert.Equal("Lufkin", customer.City);
+
+                customer.Name = "Bob";
+                customer.City = "Dallas";
+
+                await repo.UpdateAsync(customer, id);
+                await repo.SaveChangesAsync();
+
+                customer = await repo.GetByIdAsync(customer.Id);
+
+                Assert.NotEqual(0, customer.Id);
+                Assert.Equal("Bob", customer.Name);
+                Assert.Equal("Dallas", customer.City);
+            }
         }
     }
 }
