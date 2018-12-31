@@ -10,10 +10,10 @@
     <h4>Reservation</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Id)
         </dd>
         <dt class="col-sm-2">
@@ -28,31 +28,37 @@
             @Html.DisplayFor(model => model.Customer.City) - @Html.DisplayFor(model => model.Customer.State).
             @Html.DisplayFor(model => model.Customer.Zipcode)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Room
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Room.Id)<br />
-            @Html.DisplayFor(model => model.Room.RoomType)<br/>
+            @Html.DisplayFor(model => model.Room.RoomType)<br />
             @Html.DisplayFor(model => model.Room.Beds) Beds<br />
             $ @Html.DisplayFor(model => model.Room.Cost)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.StartDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.StartDate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.EndDate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.EndDate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Paid)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Paid)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.TotalCost)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TotalCost)
         </dd>
     </dl>

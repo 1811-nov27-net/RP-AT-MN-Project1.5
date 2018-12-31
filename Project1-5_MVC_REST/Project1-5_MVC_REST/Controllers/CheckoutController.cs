@@ -22,7 +22,7 @@ namespace Project1_5_MVC_REST.Controllers
             EventRepository = _eventRepository;
         }
 
-        // GET: api/Checkout/5/3
+        // GET: api/Checkout/5
         [HttpGet("{id}", Name = "Get")]
         public async Task<ActionResult<decimal>> GetAsync(int id)
         {
@@ -55,6 +55,44 @@ namespace Project1_5_MVC_REST.Controllers
             {
                 return StatusCode(500, ex);
             }
+        }
+
+        // PUT: api/ApiWithActions/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult> CheckoutAsync(int id)
+        {
+            Reservation reservationDB;
+            try
+            {
+                reservationDB = await Repository.GetByIdAsync(id);
+                
+                if (reservationDB == null)
+                {
+                    return NotFound(); // if resource doesn't exist, i'll return an error
+                }
+
+                reservationDB.Paid = true;
+                await Repository.UpdateAsync(reservationDB, reservationDB.Id);
+                await Repository.SaveChangesAsync();
+
+                List<EventCustomer> events = (List<EventCustomer>)await EventRepository.GetByCustomerIdAsync(reservationDB.CustomerId);
+                foreach(var item in events)
+                {
+                    item.Paid = true;
+                    await EventRepository.UpdateAsync(item, item.Id);
+                    await EventRepository.SaveChangesAsync();
+                }
+
+                // return proper 204 No Content response
+                return NoContent(); // success = Ok()
+            }
+            catch (Exception ex)
+            {
+                // internal server error
+                return StatusCode(500, ex);
+            }
+            // return proper 204 No Content response
+            return NoContent(); // success = Ok()
         }
     }
 }

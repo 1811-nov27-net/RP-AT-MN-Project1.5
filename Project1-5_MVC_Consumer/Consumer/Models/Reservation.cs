@@ -23,7 +23,9 @@ namespace Project1_5_Library
 
         [Required]
         public decimal TotalCost { get; set; }
-        
+
+        public bool Paid { get; set; }
+
         public virtual Customer Customer { get; set; }
         public virtual Room Room { get; set; }
     }
