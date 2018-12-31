@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Project1_5_Library.Room>
+
+    @foreach (var item in Model)
+    {
+        <option value="@item.Id">
+
+            @Html.DisplayFor(modelItem => item.Id)
+            @Html.DisplayFor(modelItem => item.Cost)
+            (@Html.DisplayFor(modelItem => item.RoomType))
+        </option>
+    }
