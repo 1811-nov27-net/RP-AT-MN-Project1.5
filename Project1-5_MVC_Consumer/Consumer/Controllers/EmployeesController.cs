@@ -11,17 +11,15 @@ using Project1_5_Library;
 
 namespace Consumer.Controllers
 {
-    public class RoomsController : AServiceController
-    {
-		public RoomsController(HttpClient client) : base(client)
-		{
-		}
+	public class EmployeesController : AServiceController
+	{
+		public EmployeesController(HttpClient client) : base(client) { }
 
-		// GET: Rooms
+		// GET: Employee
 		public async Task<ActionResult> Index()
 		{
-			// send "GET api/Room" to service, get headers of response
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/Room");
+			// send "GET api/Employee" to service, get headers of response
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/Employee");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -41,16 +39,16 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			List<Room> Rooms = JsonConvert.DeserializeObject<List<Room>>(responseBody);
+			List<Employee> Employees = JsonConvert.DeserializeObject<List<Employee>>(responseBody);
 
-			return View(Rooms);
+			return View(Employees);
 		}
 
-		// GET: Room/Details/5
+		// GET: Employee/Details/5
 		public async Task<ActionResult> DetailsAsync(int id)
-		// send "GET api/Temperature" to service, get headers of response
+		// send "GET api/Employee" to service, get headers of response
 		{
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Room/{id}");
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Employee/{id}");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -70,15 +68,14 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			Room Room = JsonConvert.DeserializeObject<Room>(responseBody);
+			Employee Employee = JsonConvert.DeserializeObject<Employee>(responseBody);
 
-			return View(Room);
+			return View(Employee);
 
 		}
 
-		// GET: Room/Create
-		public async Task<ActionResult> CreateAsync() //commet outto makesynchronous to create view
-		//public ActionResult Create() - some issues were going on here tring going back to asyncs
+		// GET: Employee/Create
+		public async Task<ActionResult> CreateAsync()
 		{
 			//	HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/account/loggedinuser");
 			//	HttpResponseMessage response = await Client.SendAsync(request);
@@ -95,16 +92,16 @@ namespace Consumer.Controllers
 			// provide default value to Create form
 			return View();
 		}
-		// POST: Room/Create
+		// POST: Employee/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> CreateAsync(Room record)
+		public async Task<ActionResult> CreateAsync(Employee record)
 		{
 			try
 			{
 
 				// use POST method, not GET, based on the route the service has defined
-				HttpRequestMessage request = CreateRequestToService(HttpMethod.Post, "api/Room", record);
+				HttpRequestMessage request = CreateRequestToService(HttpMethod.Post, "api/Employee", record);
 				HttpResponseMessage response = await Client.SendAsync(request);
 
 				if (!response.IsSuccessStatusCode)
@@ -123,10 +120,10 @@ namespace Consumer.Controllers
 			}
 		}
 
-		// GET: Events/Edit/5
+		// GET: Employee/Edit/5
 		public async Task<ActionResult> EditAsync(int id)
 		{
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Room/{id}");
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Employee/{id}");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -146,20 +143,20 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			Room Room = JsonConvert.DeserializeObject<Room>(responseBody);
+			Employee Employee = JsonConvert.DeserializeObject<Employee>(responseBody);
 
-			return View(Room);
+			return View(Employee);
 		}
 
-		// POST: Room/Edit/5
+		// POST: Employee/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditAsync(int id, Room record)
+		public async Task<ActionResult> EditAsync(int id, Employee record)
 		{
 			try
 			{
 
-				var url = $"https://localhost:44336/api/Room/{id}";
+				var url = $"https://localhost:44336/api/Employee/{id}";
 				var response = await Client.PutAsJsonAsync(url, record);
 
 				if (response.IsSuccessStatusCode)
@@ -173,11 +170,10 @@ namespace Consumer.Controllers
 				return View(record);
 			}
 		}
-
-		// GET: Events/Delete/5
+		// GET: Employee/Delete/5
 		public async Task<ActionResult> DeleteAsync(int id)
 		{
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Room/{id}");
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Employee/{id}");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -197,19 +193,19 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			Room Room = JsonConvert.DeserializeObject<Room>(responseBody);
+			Employee Employee = JsonConvert.DeserializeObject<Employee>(responseBody);
 
-			return View(Room);
+			return View(Employee);
 		}
 
-		// POST: Room/Delete/5
+		// POST: Employee/Delete/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> DeleteAsync(int id, IFormCollection collection)
 		{
 			try
 			{
-				var response = await Client.DeleteAsync($"https://localhost:44336/api/Room/{id}");
+				var response = await Client.DeleteAsync($"https://localhost:44336/api/Employee/{id}");
 
 				if (response.IsSuccessStatusCode)
 				{
@@ -222,24 +218,5 @@ namespace Consumer.Controllers
 				return RedirectToAction(nameof(DeleteAsync), new { id });
 			}
 		}
-
-
-        // GET: Rooms/GetAvailableRoomSelectBoxAsync/2018-12-26
-        public async Task<string> GetAvailableRoomSelectBoxAsync(string date)
-        {
-            HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/RoomAvailable/{date}");
-            HttpResponseMessage response = await Client.SendAsync(request);
-            var responseBody = await response.Content.ReadAsStringAsync();
-            List<Room> roomList = JsonConvert.DeserializeObject<List<Room>>(responseBody);
-
-            String ret = "";
-
-            foreach(var item in roomList)
-            {
-                ret += $"<option value='{item.Id}'>{item.Id} {String.Format("{0:0.00}", item.Cost)} ({item.RoomType})</option>";
-            }
-
-            return ret;
-        }
-    }
+	}
 }

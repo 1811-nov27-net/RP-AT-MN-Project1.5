@@ -4,24 +4,24 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Consumer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Project1_5_Library;
 
+
 namespace Consumer.Controllers
 {
-    public class RoomsController : AServiceController
-    {
-		public RoomsController(HttpClient client) : base(client)
-		{
-		}
+	public class ReservationsController : AServiceController
+	{
+		public ReservationsController(HttpClient client) : base(client) { }
 
-		// GET: Rooms
+		// GET: Reservations
 		public async Task<ActionResult> Index()
 		{
-			// send "GET api/Room" to service, get headers of response
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/Room");
+			// send "GET api/Temperature" to service, get headers of response
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/Reservation");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -41,16 +41,16 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			List<Room> Rooms = JsonConvert.DeserializeObject<List<Room>>(responseBody);
+			List<Reservation> Reservations = JsonConvert.DeserializeObject<List<Reservation>>(responseBody);
 
-			return View(Rooms);
+			return View(Reservations);
 		}
 
-		// GET: Room/Details/5
+		// GET: Reservations/Details/5
 		public async Task<ActionResult> DetailsAsync(int id)
 		// send "GET api/Temperature" to service, get headers of response
 		{
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Room/{id}");
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Reservation/{id}");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -70,41 +70,50 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			Room Room = JsonConvert.DeserializeObject<Room>(responseBody);
+			Reservation Reservations = JsonConvert.DeserializeObject<Reservation>(responseBody);
 
-			return View(Room);
+			return View(Reservations);
 
 		}
 
-		// GET: Room/Create
-		public async Task<ActionResult> CreateAsync() //commet outto makesynchronous to create view
-		//public ActionResult Create() - some issues were going on here tring going back to asyncs
+		// GET: Reservations/Create
+		public async Task<ActionResult> CreateAsync()
 		{
-			//	HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/account/loggedinuser");
-			//	HttpResponseMessage response = await Client.SendAsync(request);
+            //	HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/account/loggedinuser");
+            //	HttpResponseMessage response = await Client.SendAsync(request);
 
-			//	if (!response.IsSuccessStatusCode)
-			//	{
-			//		if (response.StatusCode == HttpStatusCode.Unauthorized)
-			//		{
-			//			return RedirectToAction("Login", "Account");
-			//		}
-			//		return View("Error");
-			//	}
+            //	if (!response.IsSuccessStatusCode)
+            //	{
+            //		if (response.StatusCode == HttpStatusCode.Unauthorized)
+            //		{
+            //			return RedirectToAction("Login", "Account");
+            //		}
+            //		return View("Error");
+            //	}
 
-			// provide default value to Create form
-			return View();
+            // provide default value to Create form
+
+            //Get All Customers
+            HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Customer");
+            HttpResponseMessage response = await Client.SendAsync(request);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            List<Customer> customersList = JsonConvert.DeserializeObject<List<Customer>>(responseBody);
+
+            ReservationView model = new ReservationView();
+            model.CustomerList = customersList;
+
+            return View(model);
 		}
-		// POST: Room/Create
+		// POST: Reservations/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> CreateAsync(Room record)
+		public async Task<ActionResult> CreateAsync(Reservation record)
 		{
 			try
 			{
 
 				// use POST method, not GET, based on the route the service has defined
-				HttpRequestMessage request = CreateRequestToService(HttpMethod.Post, "api/Room", record);
+				HttpRequestMessage request = CreateRequestToService(HttpMethod.Post, "api/Reservation", record);
 				HttpResponseMessage response = await Client.SendAsync(request);
 
 				if (!response.IsSuccessStatusCode)
@@ -123,10 +132,10 @@ namespace Consumer.Controllers
 			}
 		}
 
-		// GET: Events/Edit/5
+		// GET: Reservations/Edit/5
 		public async Task<ActionResult> EditAsync(int id)
 		{
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Room/{id}");
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Reservation/{id}");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -146,20 +155,50 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			Room Room = JsonConvert.DeserializeObject<Room>(responseBody);
+			Reservation Reservation = JsonConvert.DeserializeObject<Reservation>(responseBody);
 
-			return View(Room);
+            //Set Values to View
+            ReservationView model = new ReservationView();
+            model.Id = Reservation.Id;
+            model.CustomerId = Reservation.CustomerId;
+            model.StartDate = Reservation.StartDate;
+            model.EndDate = Reservation.EndDate;
+            model.TotalCost = Reservation.TotalCost;
+            
+            //Get Customers list
+            request = CreateRequestToService(HttpMethod.Get, $"api/Customer");
+            response = await Client.SendAsync(request);
+            responseBody = await response.Content.ReadAsStringAsync();
+            List<Customer> customersList = JsonConvert.DeserializeObject<List<Customer>>(responseBody);
+            model.CustomerList = customersList;
+
+            //Get Customer
+            request = CreateRequestToService(HttpMethod.Get, $"api/Customer/{Reservation.CustomerId}");
+            response = await Client.SendAsync(request);
+            responseBody = await response.Content.ReadAsStringAsync();
+            Customer customer = JsonConvert.DeserializeObject<Customer>(responseBody);
+            model.Customer = customer;
+
+            //Get Room
+            request = CreateRequestToService(HttpMethod.Get, $"api/Room/{Reservation.RoomId}");
+            response = await Client.SendAsync(request);
+            responseBody = await response.Content.ReadAsStringAsync();
+            Room room = JsonConvert.DeserializeObject<Room>(responseBody);
+            model.Room = room;
+            model.roomSelectString = $"<option value='{room.Id}'>{room.Id} {String.Format("{0:0.00}", room.Cost)} ({room.RoomType})</option>";
+
+            return View(model);
 		}
 
-		// POST: Room/Edit/5
+		// POST: Reservations/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditAsync(int id, Room record)
+		public async Task<ActionResult> EditAsync(int id, Reservation record)
 		{
 			try
 			{
 
-				var url = $"https://localhost:44336/api/Room/{id}";
+				var url = $"https://localhost:44336/api/Reservation/{id}";
 				var response = await Client.PutAsJsonAsync(url, record);
 
 				if (response.IsSuccessStatusCode)
@@ -173,11 +212,10 @@ namespace Consumer.Controllers
 				return View(record);
 			}
 		}
-
-		// GET: Events/Delete/5
+		// GET: Reservations/Delete/5
 		public async Task<ActionResult> DeleteAsync(int id)
 		{
-			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Room/{id}");
+			HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Reservation/{id}");
 			HttpResponseMessage response = await Client.SendAsync(request);
 
 			//// (if status code is not 200-299 (for success))
@@ -197,19 +235,19 @@ namespace Consumer.Controllers
 			// this is a string, so it must be deserialized into a C# object.
 			// we could use DataContractSerializer, .NET built-in, but it's more awkward
 			// than the third-party Json.NET aka Newtonsoft JSON.
-			Room Room = JsonConvert.DeserializeObject<Room>(responseBody);
+			Reservation Reservations = JsonConvert.DeserializeObject<Reservation>(responseBody);
 
-			return View(Room);
+			return View(Reservations);
 		}
 
-		// POST: Room/Delete/5
+		// POST: Reservations/Delete/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> DeleteAsync(int id, IFormCollection collection)
 		{
 			try
 			{
-				var response = await Client.DeleteAsync($"https://localhost:44336/api/Room/{id}");
+				var response = await Client.DeleteAsync($"https://localhost:44336/api/Reservation/{id}");
 
 				if (response.IsSuccessStatusCode)
 				{
@@ -222,24 +260,5 @@ namespace Consumer.Controllers
 				return RedirectToAction(nameof(DeleteAsync), new { id });
 			}
 		}
-
-
-        // GET: Rooms/GetAvailableRoomSelectBoxAsync/2018-12-26
-        public async Task<string> GetAvailableRoomSelectBoxAsync(string date)
-        {
-            HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/RoomAvailable/{date}");
-            HttpResponseMessage response = await Client.SendAsync(request);
-            var responseBody = await response.Content.ReadAsStringAsync();
-            List<Room> roomList = JsonConvert.DeserializeObject<List<Room>>(responseBody);
-
-            String ret = "";
-
-            foreach(var item in roomList)
-            {
-                ret += $"<option value='{item.Id}'>{item.Id} {String.Format("{0:0.00}", item.Cost)} ({item.RoomType})</option>";
-            }
-
-            return ret;
-        }
-    }
+	}
 }
