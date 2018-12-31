@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Consumer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -78,20 +79,30 @@ namespace Consumer.Controllers
 		// GET: Reservations/Create
 		public async Task<ActionResult> CreateAsync()
 		{
-			//	HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/account/loggedinuser");
-			//	HttpResponseMessage response = await Client.SendAsync(request);
+            //	HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, "api/account/loggedinuser");
+            //	HttpResponseMessage response = await Client.SendAsync(request);
 
-			//	if (!response.IsSuccessStatusCode)
-			//	{
-			//		if (response.StatusCode == HttpStatusCode.Unauthorized)
-			//		{
-			//			return RedirectToAction("Login", "Account");
-			//		}
-			//		return View("Error");
-			//	}
+            //	if (!response.IsSuccessStatusCode)
+            //	{
+            //		if (response.StatusCode == HttpStatusCode.Unauthorized)
+            //		{
+            //			return RedirectToAction("Login", "Account");
+            //		}
+            //		return View("Error");
+            //	}
 
-			// provide default value to Create form
-			return View();
+            // provide default value to Create form
+
+            //Get All Customers
+            HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/Customer");
+            HttpResponseMessage response = await Client.SendAsync(request);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            List<Customer> customersList = JsonConvert.DeserializeObject<List<Customer>>(responseBody);
+
+            ReservationView model = new ReservationView();
+            model.CustomerList = customersList;
+
+            return View(model);
 		}
 		// POST: Reservations/Create
 		[HttpPost]

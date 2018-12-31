@@ -173,6 +173,7 @@ namespace Consumer.Controllers
 				return View(record);
 			}
 		}
+
 		// GET: Events/Delete/5
 		public async Task<ActionResult> DeleteAsync(int id)
 		{
@@ -221,5 +222,24 @@ namespace Consumer.Controllers
 				return RedirectToAction(nameof(DeleteAsync), new { id });
 			}
 		}
-	}
+
+
+        // GET: Rooms/GetAvailableRoomSelectBoxAsync/2018-12-26
+        public async Task<string> GetAvailableRoomSelectBoxAsync(string date)
+        {
+            HttpRequestMessage request = CreateRequestToService(HttpMethod.Get, $"api/RoomAvailable/{date}");
+            HttpResponseMessage response = await Client.SendAsync(request);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            List<Room> roomList = JsonConvert.DeserializeObject<List<Room>>(responseBody);
+
+            String ret = "";
+
+            foreach(var item in roomList)
+            {
+                ret += $"<option value='{item.Id}'>{item.Id} {String.Format("{0:0.00}", item.Cost)} ({item.RoomType})</option>";
+            }
+
+            return ret;
+        }
+    }
 }

@@ -60,6 +60,10 @@ namespace Consumer
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "getByDate",
+                    template: "{controller=Home}/{action=Index}/{date?}");
+
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
