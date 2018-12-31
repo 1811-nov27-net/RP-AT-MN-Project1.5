@@ -40,7 +40,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
                 });
             }
         }
-
+        
         public abstract Task CreateWorksAsync();
         public abstract Task UpdateWorksAsync();
         public abstract Task UpdateWithWrongIdShouldReturnExceptionAsync();
