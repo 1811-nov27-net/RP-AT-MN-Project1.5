@@ -157,13 +157,82 @@ namespace Project1_5_Tests.DataAccess.Repositories
         [Fact]
         public override async Task GetAllWorksAsync()
         {
-           
+            List<EventCustomer> eventCustomersList = new List<EventCustomer>();
+            EventCustomer eventCustomerSaved = null;
+            Customer customerSaved = null;
+            Event EventSaved = null;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                .UseInMemoryDatabase("db_eventcustomer_test_getall").Options;
+
+            using (var db = new Project15Context(options)) ;
+
+            using (var db = new Project15Context(options))
+            {
+                var customerRepo = new CustomerRepository(db);
+                var eventRepo = new EventRepository(db);
+                var repo = new EventCustomerRepository(db);
+
+                //Create customer
+                Customer customer = new Customer { Name = "Axel", Address1 = "111 Address" };
+                customer = await customerRepo.CreateAsync(customer);
+                await customerRepo.SaveChangesAsync();
+
+                Event Event = new Event { Name = "Jazz Fest", Type = "Music", Cost = 40 };
+                Event = await eventRepo.CreateAsync(Event);
+                await eventRepo.SaveChangesAsync();
+
+                for (int i = 0; i < 5; i++)
+                {
+                    EventCustomer eventCustomer = new EventCustomer
+                    {
+                        CustomerId = customer.Id,
+                        EventId = Event.Id,
+                    };
+                    eventCustomerSaved = await repo.CreateAsync(eventCustomer);
+                    await repo.SaveChangesAsync();
+                    eventCustomersList.Add(eventCustomerSaved);
+                }
+
+                EventSaved = Event;
+                customerSaved = customer;
+            }
+            using (var db = new Project15Context(options))
+            {
+                var repo = new EventCustomerRepository(db);
+                List<EventCustomer> list = (List<EventCustomer>)await repo.GetAllAsync();
+
+                Assert.Equal(eventCustomersList.Count, list.Count);
+
+                for(int i = 0; i < 5; i++)
+                {
+                    Assert.Equal(eventCustomersList[i].CustomerId, list[i].CustomerId);
+                    Assert.Equal(eventCustomersList[i].EventId, list[i].EventId);
+                    Assert.NotEqual(0, list[i].Id);
+                }
+            }
         }
 
         [Fact]
         public override async Task GetByIdThatDoesntExistReturnsNullAsync()
         {
-          
+            int id = 1000;
+
+            var options = new DbContextOptionsBuilder<Project15Context>()
+                          .UseInMemoryDatabase("db_eventcustomer_test_getId").Options;
+
+            // arrange (use the context directly - we assume that works)
+            using (var db = new Project15Context(options)) ;
+
+            // assert (for assert, once again use the context directly for verify.)
+            using (var db = new Project15Context(options))
+            {
+                var repo = new EventCustomerRepository(db);
+
+                EventCustomer eventCustomer = await repo.GetByIdAsync(id);
+
+                Assert.Null(eventCustomer);
+            }
         }
 
         [Fact]
