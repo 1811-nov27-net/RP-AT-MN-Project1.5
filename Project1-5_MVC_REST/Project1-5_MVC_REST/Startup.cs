@@ -62,12 +62,7 @@ namespace Project1_5_MVC_REST
 
             services.AddDbContext<Project15Context>(optionsBuilder => optionsBuilder.UseSqlServer(Configuration.GetConnectionString("Project1-5")));
 
-            services
-							.AddMvc(options =>
-								{
-									options.Filters.Add(typeof(GetLoggedInEmployeeFilter));
-								})
-							.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
