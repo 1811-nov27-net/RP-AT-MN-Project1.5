@@ -46,10 +46,14 @@ namespace Project1_5_DataAccess.Repositories
                                             .Include(ev => ev.Event)
                                             .SingleOrDefault(e => e.Id == id);
 
-            eventCustomer.Customer.EventsCustomers = null;
-            eventCustomer.Event.EventsCustomers = null;
+            if (eventCustomer != null)
+            {
+                eventCustomer.Customer.EventsCustomers = null;
+                eventCustomer.Event.EventsCustomers = null;
 
-            return Mapper.Map<EventsCustomers, EventCustomer>(eventCustomer);
+                return Mapper.Map<EventsCustomers, EventCustomer>(eventCustomer);
+            }
+            return null;
         }
 
         public async Task<EventCustomer> CreateAsync(EventCustomer model)
