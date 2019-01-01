@@ -20,11 +20,11 @@
 <body>
     <header>
         @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">*@
-        <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3 avbar-toggleable-sm navbar sticky-top " />
+   <nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3 avbar-toggleable-sm navbar sticky-top align-content-md-start">
 
         <!-- Brand/logo -->
         <a class="navbar-brand" href="#">
-            <img src="bird.jpg" alt="logo" style="width:40px;">
+            <img src="~/Images/logo520.jpg" alt="logo" style="width:60px;">
         </a>
 @* ------------------------------------------------------------- *@
         <div class="container">
@@ -52,6 +52,12 @@
                     </li>
                      <li class="nav-item">
                          <a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="Index">Reservations</a>
+                    </li>
+                    <li class="nav-item">
+                         <a class="nav-link text-dark" asp-area="" asp-controller="EventCustomers" asp-action="Index">Register for Events</a>
+                    </li>
+                    <li class="nav-item">
+                         <a class="nav-link text-dark" asp-area="" asp-controller="EmployeeLogin" asp-action="Index">Employee Login</a>
                     </li>
 
                 </ul>
