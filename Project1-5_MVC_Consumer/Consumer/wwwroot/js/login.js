@@ -2,6 +2,10 @@
 {
 	event.preventDefault();
 
-	let role = $( this ).find( ':selected' ).data( 'role' );
-	alert( role );
+    let role = $(this).find(':selected').data('role');
+
+    sessionStorage.setItem("role", role);
+    sessionStorage.setItem("authenticated", true);
+
+    window.location.replace("/");
 } );
