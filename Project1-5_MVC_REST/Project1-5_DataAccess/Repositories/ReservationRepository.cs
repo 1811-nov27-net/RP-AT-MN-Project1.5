@@ -48,10 +48,15 @@ namespace Project1_5_DataAccess.Repositories
                                             .Where(r => r.Id == id)
                                             .FirstOrDefault();
 
-            reservation.Customer.Reservation = null;
-            reservation.Room.Reservation = null;
+            if(reservation != null) { 
+                if(reservation.Customer.Reservation != null)
+                    reservation.Customer.Reservation = null;
+                if (reservation.Room.Reservation != null)
+                    reservation.Room.Reservation = null;
 
-            return Mapper.Map<Reservations, Reservation>(reservation);
+                return Mapper.Map<Reservations, Reservation>(reservation);
+            }
+            return null;
         }
 
         public async Task<Reservation> CreateAsync(Reservation model)
