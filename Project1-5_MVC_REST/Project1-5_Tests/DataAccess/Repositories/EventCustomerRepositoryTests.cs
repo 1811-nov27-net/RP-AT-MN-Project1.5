@@ -165,7 +165,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
             var options = new DbContextOptionsBuilder<Project15Context>()
                 .UseInMemoryDatabase("db_eventcustomer_test_getall").Options;
 
-            using (var db = new Project15Context(options)) ;
+            using (var db = new Project15Context(options));
 
             using (var db = new Project15Context(options))
             {

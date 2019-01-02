@@ -197,7 +197,7 @@ namespace Project1_5_Tests.DataAccess.Repositories
 
             // arrange (use the context directly - we assume that works)
             var options = new DbContextOptionsBuilder<Project15Context>()
-                .UseInMemoryDatabase("db_room_test_getbyid").Options;
+                .UseInMemoryDatabase("db_room_test_getbyidworks").Options;
             using (var db = new Project15Context(options)) ;
 
             // act (for act, only use the repo, to test it)
