@@ -48,8 +48,10 @@ namespace Project1_5_DataAccess.Repositories
 
             if (eventCustomer != null)
             {
-                eventCustomer.Customer.EventsCustomers = null;
-                eventCustomer.Event.EventsCustomers = null;
+                if(eventCustomer.Customer != null)
+                    eventCustomer.Customer.EventsCustomers = null;
+                if (eventCustomer.Event != null)
+                    eventCustomer.Event.EventsCustomers = null;
 
                 return Mapper.Map<EventsCustomers, EventCustomer>(eventCustomer);
             }
