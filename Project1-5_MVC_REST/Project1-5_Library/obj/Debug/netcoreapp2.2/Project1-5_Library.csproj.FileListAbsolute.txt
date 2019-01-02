@@ -1,0 +1,9 @@
+C:\Revature\Projects\Project1-5\Project1-5_MVC_REST\Project1-5_Library\bin\Debug\netcoreapp2.2\Project1-5_Library.deps.json
+C:\Revature\Projects\Project1-5\Project1-5_MVC_REST\Project1-5_Library\bin\Debug\netcoreapp2.2\Project1-5_Library.dll
+C:\Revature\Projects\Project1-5\Project1-5_MVC_REST\Project1-5_Library\bin\Debug\netcoreapp2.2\Project1-5_Library.pdb
+C:\Revature\Projects\Project1-5\Project1-5_MVC_REST\Project1-5_Library\obj\Debug\netcoreapp2.2\Project1-5_Library.csproj.CoreCompileInputs.cache
+C:\Revature\Projects\Project1-5\Project1-5_MVC_REST\Project1-5_Library\obj\Debug\netcoreapp2.2\Project1-5_Library.AssemblyInfoInputs.cache
+C:\Revature\Projects\Project1-5\Project1-5_MVC_REST\Project1-5_Library\obj\Debug\netcoreapp2.2\Project1-5_Library.AssemblyInfo.cs
+C:\Revature\Projects\Project1-5\Project1-5_MVC_REST\Project1-5_Library\obj\Debug\netcoreapp2.2\Project1-5_Library.dll
+C:\Revature\Projects\Project1-5\Project1-5_MVC_REST\Project1-5_Library\obj\Debug\netcoreapp2.2\Project1-5_Library.pdb
+C:\Revature\Projects\Project1-5\Project1-5_MVC_REST\Project1-5_Library\obj\Debug\netcoreapp2.2\Project1-5_Library.csprojAssemblyReference.cache
