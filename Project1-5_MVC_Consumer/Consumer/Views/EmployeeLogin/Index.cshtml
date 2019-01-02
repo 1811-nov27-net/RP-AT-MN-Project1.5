@@ -11,24 +11,23 @@
     </p>*@
 
 
-<div class="form-group">
-    <form id="loginForm">
-        <select name="EmployeeId" class='form-control' required>
-            @foreach (var emp in Model.Employees)
-            {
-
-                <option value="@emp.Id" data-role="@emp.Role">
-
-                    @Html.DisplayFor(m => emp.Name)
-
-
-                </option>
-            }
-        </select>
-        <span asp-validation-for="EmployeeId" class="text-danger"></span>
-        <Button id="loginEmplyee">login </Button>
-    </form>
-</div>
+<form id="loginForm">
+    <div class="col-md-6 offset-md-3 my-5">
+        <div class="form-group">
+            <select name="EmployeeId" class='form-control' required>
+                @foreach (var emp in Model.Employees)
+                {
+                    <option value="@emp.Id" data-role="@emp.Role">
+                        @Html.DisplayFor(m => emp.Name)
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="'form-group text-center">
+            <Button id="loginEmplyee" class="btn btn-primary">Login</Button>
+        </div>
+    </div>
+</form>
 
 @*<table class="table">
         <thead>
