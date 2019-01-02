@@ -61,7 +61,7 @@ namespace Consumer
             {
                 routes.MapRoute(
                     name: "getByDate",
-                    template: "{controller=Home}/{action=Index}/{date?}");
+                    template: "Rooms/GetAvailableRoomSelectBoxAsync/{date?}");
 
                 routes.MapRoute(
                     name: "default",

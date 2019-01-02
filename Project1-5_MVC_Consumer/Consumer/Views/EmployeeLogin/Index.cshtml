@@ -1,0 +1,79 @@
+﻿@model Consumer.Models.LoginView
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Please Select an Employee to login as that Employee</h1>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+
+
+<form id="loginForm">
+    <div class="col-md-6 offset-md-3 my-5">
+        <div class="form-group">
+            <select name="EmployeeId" class='form-control' required>
+                @foreach (var emp in Model.Employees)
+                {
+                    <option value="@emp.Id" data-role="@emp.Role">
+                        @Html.DisplayFor(m => emp.Name)
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="'form-group text-center">
+            <Button id="loginEmplyee" class="btn btn-primary">Login</Button>
+        </div>
+    </div>
+</form>
+
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Salary)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Role)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Salary)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Role)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="/js/login.js" asp-append-version="true"></script>
+}
