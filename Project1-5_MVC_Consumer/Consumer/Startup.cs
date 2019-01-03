@@ -59,9 +59,9 @@ namespace Consumer
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
+                /*routes.MapRoute(
                     name: "getByDate",
-                    template: "Rooms/GetAvailableRoomSelectBoxAsync/{date?}");
+                    template: "CheckRoom/GetAvailableRoomSelectBoxAsync/{date}");*/
 
                 routes.MapRoute(
                     name: "default",

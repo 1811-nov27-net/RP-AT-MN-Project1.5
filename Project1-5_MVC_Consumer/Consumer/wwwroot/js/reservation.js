@@ -14,7 +14,10 @@ $('#StartDate').blur(function () {
 
 function getAvailablesRooms(date) {
     console.log(date);
-    $.get("/Rooms/GetAvailableRoomSelectBoxAsync/" + date, function (data) {
+    date = date.replace("-", "");
+    date = date.replace("-", "");
+    console.log(date);
+    $.get("/CheckRoom/GetAvailableRoomSelectBoxAsync/" + date, function (data) {
         console.log(data);
         $('#RoomId').html(data);
     });
