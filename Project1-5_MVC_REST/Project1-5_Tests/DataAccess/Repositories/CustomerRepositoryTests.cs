@@ -53,10 +53,10 @@ namespace Project1_5_Tests.DataAccess.Repositories
         [Fact]
         public override async Task DeleteWithIdThatDoesntExistThrowsExceptionAsync()
         {
-            int id = 1000;
+            int id = 100000;
 
             var options = new DbContextOptionsBuilder<Project15Context>()
-                .UseInMemoryDatabase("db_customer_test_delete").Options;
+                .UseInMemoryDatabase("db_customer_test_deleteWithIdNotExist").Options;
 
             // arrange (use the context directl - we assume that it works)
             using (var db = new Project15Context(options));
